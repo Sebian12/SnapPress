@@ -15,6 +15,9 @@ def select_photos ():
 
 # Function that compresses photos
 def compress():
+    total_before = 0
+    total_after = 0
+
     compress_value = int(quality.get())
 
     for i, file in enumerate(selected_files):
@@ -22,10 +25,16 @@ def compress():
         img = Image.open(file)
         img.save(name + "_compressed" + ext, quality=compress_value)
 
+        total_before += os.path.getsize(file)
+        total_after += os.path.getsize(name + "_compressed" + ext)
+
         progress.set((i + 1) / len(selected_files))
         progress.update()
 
-    messagebox.showinfo("Done", "Compression completed!")
+    total_difference = (total_before - total_after) / (1024 * 1024)
+    total_difference_percent = (total_before - total_after) / total_before * 100
+
+    messagebox.showinfo("Done", "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
 
 # Function that updates quality label
 def update_label(value):
