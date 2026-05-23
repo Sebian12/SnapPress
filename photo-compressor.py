@@ -36,6 +36,10 @@ def compress():
 
     messagebox.showinfo("Done", "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
 
+    selected_files.clear()
+    for widget in files_frame.winfo_children():
+        widget.destroy()
+
 # Function that updates quality label
 def update_label(value):
     qualityLbl.configure(text=f"Quality: {int(value)}")
