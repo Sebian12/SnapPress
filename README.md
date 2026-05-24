@@ -1,6 +1,6 @@
 # Photo Compressor
 
-A desktop application for compressing JPEG and PNG photos without visible quality loss. Built with Python and Tkinter.
+A desktop application for compressing JPEG and PNG photos without visible quality loss. Built with Python and customtkinter.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue) ![Pillow](https://img.shields.io/badge/Pillow-10.x-green) ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
@@ -15,7 +15,9 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 
 ## Screenshots
 
-*coming soon*
+![Empty](assets/empty.png)
+![After compression](assets/one_file_comp.png)
+![Multiple files](assets/multiple_files_comp.png)
 
 ## Requirements
 
