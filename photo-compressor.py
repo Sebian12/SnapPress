@@ -10,7 +10,7 @@ def select_photos ():
     filename = filedialog.askopenfilenames(initialdir="/", title="Select file",filetypes=(("Photos", "*.png *.jpg *.jpeg"), ("All Files", "*.*")))
     if filename:
         for file in filename:
-            ctk.CTkLabel(files_frame, text=os.path.basename(file)).pack(anchor="w", padx=10)
+            ctk.CTkLabel(files_frame, text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024 * 1024):.2f} MB").pack(anchor="w", padx=10)
             selected_files.append(file)
 
 # Function that compresses photos
@@ -35,7 +35,7 @@ def compress():
     total_difference_percent = (total_before - total_after) / total_before * 100
 
     before_space_lbl.configure(text=f"Before compression: {total_before / (1024 * 1024):.2f}MB")
-    after_space_lbl.configure(text=f"Reduced by: {total_difference:.2f}MB")
+    after_space_lbl.configure(text=f"New size: {(total_before / (1024 * 1024)) - total_difference:.2f}MB")
 
     messagebox.showinfo("Done", "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
 
