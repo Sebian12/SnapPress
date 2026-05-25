@@ -5,6 +5,7 @@ from PIL import Image
 from settings import open_settings, b_mode
 
 selected_files = []
+settings_win = None
 
 # Function to select files
 def select_photos ():
@@ -51,7 +52,10 @@ def update_label(value):
 # Function that shows settings window
 def show_settings():
     global settings_win
-    settings_win = open_settings()
+    if settings_win == None or not settings_win.winfo_exists():
+        settings_win = open_settings()
+    else:
+        settings_win.lift()
 
 # Theme
 ctk.set_appearance_mode(b_mode)
