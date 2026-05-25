@@ -28,6 +28,16 @@ def compress():
 
     for i, file in enumerate(selected_files):
         name, ext = os.path.splitext(file)
+
+        if ext.lower() not in [".jpg", ".jpeg", ".png"]:
+            messagebox.showinfo("Error: 02", "File not supported!")
+
+            selected_files.clear()
+            for widget in files_frame.winfo_children():
+                widget.destroy()
+
+            continue
+
         img = Image.open(file)
         img.save(name + "_compressed" + ext, quality=compress_value)
 
@@ -37,6 +47,7 @@ def compress():
         progress.set((i + 1) / len(selected_files))
         progress.update()
 
+    if total_before == 0: return
     total_difference = (total_before - total_after) / (1024 * 1024)
     total_difference_percent = (total_before - total_after) / total_before * 100
 
