@@ -39,7 +39,7 @@ pip install Pillow
 
 3. Run the app:
 ```bash
-python photo-compressor.py
+python main.py
 ```
 
 ## Usage

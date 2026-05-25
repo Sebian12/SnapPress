@@ -2,6 +2,7 @@ import os
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from PIL import Image
+from settings import open_settings, b_mode
 
 selected_files = []
 
@@ -47,17 +48,12 @@ def compress():
 def update_label(value):
     qualityLbl.configure(text=f"Quality: {int(value)}")
 
-def theme(mode):
-    global b_mode
-    if (mode == "light"):
-        b_mode = "dark"
-        ctk.set_appearance_mode(b_mode)
-    else:
-        b_mode = "light"
-        ctk.set_appearance_mode(b_mode)
+# Function that shows settings window
+def show_settings():
+    global settings_win
+    settings_win = open_settings()
 
 # Theme
-b_mode = "light"
 ctk.set_appearance_mode(b_mode)
 ctk.set_default_color_theme("blue")
 
@@ -66,8 +62,9 @@ app = ctk.CTk()
 app.title("Photo Compressor")
 app.geometry("600x750")
 
-theme_button = ctk.CTkButton(app, text="Change theme", command=lambda: theme(b_mode))
-theme_button.pack(padx=10, pady=10, fill="x")
+# Settings
+settings_button = ctk.CTkButton(app, text="Settings", command=show_settings)
+settings_button.pack(padx=10, pady=10, fill="x")
 
 # Drag & Drop (also clickable)
 drop_frame = ctk.CTkFrame(app, height=120, border_width=2)
