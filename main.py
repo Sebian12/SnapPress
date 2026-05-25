@@ -17,6 +17,10 @@ def select_photos ():
 
 # Function that compresses photos
 def compress():
+    if not selected_files:
+        messagebox.showinfo("Error: 01", "No photos selected!")
+        return
+
     total_before = 0
     total_after = 0
 
@@ -55,7 +59,7 @@ def show_settings():
     if settings_win == None or not settings_win.winfo_exists():
         settings_win = open_settings()
     else:
-        settings_win.lift()
+        pass
 
 # Theme
 ctk.set_appearance_mode(b_mode)
