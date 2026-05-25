@@ -54,12 +54,12 @@ python main.py
 - [ ] Android port
 - [ ] EXIF metadata preservation
 - [ ] Custom output folder
-- [ ] Dark mode
+- [x] Dark mode
 
 ## Tech stack
 
-- Python 3.12
-- Tkinter — GUI
+- Python 3.14
+- customtkinter — GUI
 - Pillow — image processing
 
 ## License
