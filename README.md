@@ -6,7 +6,7 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 
 ## Features
 
-- Drag & drop support
+- Drag & drop support (not yet)
 - Batch compression (multiple files at once)
 - Adjustable quality slider (1–95%)
 - Progress bar with live feedback
@@ -27,6 +27,7 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 
 ## Installation
 
+### Universal (Windows, macOS, Linux)
 1. Clone the repository:
 ```bash
 git clone https://github.com/Sebian12/photo-compressor.git
@@ -43,6 +44,10 @@ pip install Pillow
 python main.py
 ```
 
+### Windows only
+
+1. Download .exe file from current release
+
 ## Usage
 
 1. Drag and drop photos into the window, or click **Choose photos**
@@ -52,10 +57,15 @@ python main.py
 
 ## Roadmap
 
-- [ ] Android port
-- [ ] EXIF metadata preservation
-- [ ] Custom output folder
-- [x] Dark mode
+- [x] Dark mode (1.2.0)
+- [ ] Custom output folder (1.4.0)
+- [ ] File counter (1.5.0)
+- [ ] Button to clear photo list (1.6.0)
+- [ ] Thumbnails of photos (1.7.0)
+- [ ] Optimization (1.8.0)
+- [ ] EXIF metadata preservation (1.9.0)
+- [ ] Drag & Drop support (1.10.0)
+- [ ] Android port (2.0.0)
 
 ## Tech stack
 
