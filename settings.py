@@ -18,6 +18,9 @@ def open_settings():
 
     settings_window.attributes("-topmost", True)
 
-    ctk.CTkSwitch(settings_window,text="Dark mode", command=lambda: theme(b_mode)).pack(side="top", fill="x", padx=10, pady=10)
+    switch_var = ctk.IntVar(value=1 if b_mode == "dark" else 0)
+
+    switch = ctk.CTkSwitch(settings_window,text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
+    switch.pack(side="top", fill="x", padx=10, pady=10)
 
     return settings_window
