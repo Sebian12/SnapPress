@@ -2,7 +2,7 @@
 
 A desktop application for compressing JPEG and PNG photos without visible quality loss. Built with Python and customtkinter.
 
-![Python](https://img.shields.io/badge/Python-3.12-blue) ![Pillow](https://img.shields.io/badge/Pillow-10.x-green) ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey)
+![Python](https://img.shields.io/badge/Python-3.14-blue) ![Pillow](https://img.shields.io/badge/Pillow-12.x-green) ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
 ## Features
 
@@ -16,6 +16,7 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 ## Screenshots
 
 ![Empty](assets/empty.png)
+![Dark mode](assets/dark_mode.png)
 ![After compression](assets/one_file_comp.png)
 ![Multiple files](assets/multiple_files_comp.png)
 
