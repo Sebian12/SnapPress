@@ -135,7 +135,7 @@ progress.pack(padx=20, pady=10, fill="x")
 progress.set(0)
 
 # Button to start compress
-btn_compress = ctk.CTkButton(app, text="Compress", command=compress)
+btn_compress = ctk.CTkButton(app, text="Compress and save", command=compress)
 btn_compress.pack(pady=10)
 
 app.mainloop()

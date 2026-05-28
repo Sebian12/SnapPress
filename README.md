@@ -10,7 +10,7 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 - Batch compression (multiple files at once)
 - Adjustable quality slider (1–95%)
 - Progress bar with live feedback
-- Savings summary (before / after / % saved)
+- Savings summary (before / after)
 - Saves compressed files next to originals — originals are never overwritten
 
 ## Screenshots
@@ -53,7 +53,7 @@ python main.py
 1. Drag and drop photos into the window, or click **Choose photos**
 2. Adjust the quality slider (default: 80%)
 3. Click **Compress and save**
-4. Compressed files are saved in the same folder as the originals with a `_compressed` suffix
+4. Compressed files are saved in the same folder as the originals with a `_compressed` suffix or saved in selected folder
 
 ## Roadmap
 

@@ -31,7 +31,7 @@ def open_settings():
 
     switch_var = ctk.IntVar(value=1 if b_mode == "dark" else 0)
     switch = ctk.CTkSwitch(settings_window, text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
-    folder_label = ctk.CTkLabel(settings_window, text="No folder selected")
+    folder_label = ctk.CTkLabel(settings_window, text=output_folder if output_folder != "" else "No folder selected")
     folder_button = ctk.CTkButton(settings_window, text="Select output folder",command=lambda: select_folder(folder_label))
     # What you can see
 
