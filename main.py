@@ -41,12 +41,13 @@ def compress():
 
         img = Image.open(file)
         if settings.output_folder != "":
-            img.save(os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext), quality=compress_value)
+            output_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
         else:
-            img.save(name + "_compressed" + ext, quality=compress_value)
+            output_path = name + "_compressed" + ext
 
+        img.save(output_path, quality=compress_value)
         total_before += os.path.getsize(file)
-        total_after += os.path.getsize(name + "_compressed" + ext)
+        total_after += os.path.getsize(output_path)
 
         progress.set((i + 1) / len(selected_files))
         progress.update()
