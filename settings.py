@@ -1,4 +1,4 @@
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 
@@ -19,6 +19,7 @@ def select_folder(label):
     output_folder = filedialog.askdirectory(initialdir="/", title="Select output folder")
     if output_folder:
         label.configure(text=output_folder)
+        messagebox.showinfo("Done", "Selected output folder: " + output_folder)
     else:
         label.configure(text="No folder selected")
 

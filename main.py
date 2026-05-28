@@ -19,7 +19,7 @@ def select_photos ():
 # Function that compresses photos
 def compress():
     if not selected_files:
-        messagebox.showinfo("Error: 01", "No photos selected!")
+        messagebox.showinfo("ERROR01", "No photos selected!")
         return
 
     total_before = 0
@@ -31,7 +31,7 @@ def compress():
         name, ext = os.path.splitext(file)
 
         if ext.lower() not in [".jpg", ".jpeg", ".png"]:
-            messagebox.showinfo("Error: 02", "File not supported!")
+            messagebox.showinfo("ERROR02", "File not supported!")
 
             selected_files.clear()
             for widget in files_frame.winfo_children():
@@ -43,6 +43,7 @@ def compress():
         if settings.output_folder != "":
             output_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
         else:
+            messagebox.showinfo("WARNING01", "Output folder not specified! File saved in same folder as original file!")
             output_path = name + "_compressed" + ext
 
         img.save(output_path, quality=compress_value)
