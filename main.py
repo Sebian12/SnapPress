@@ -39,6 +39,12 @@ def compress():
 
             continue
 
+        if os.path.exists(file):
+            pass
+        else:
+            messagebox.showinfo("ERROR03", "File  " + os.path.basename(file) + "  doesn't exist!")
+            continue
+
         img = Image.open(file)
         if settings.output_folder != "":
             output_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
