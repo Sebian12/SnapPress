@@ -2,6 +2,7 @@ import os
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from PIL import Image
+import settings
 from settings import open_settings, b_mode
 
 selected_files = []
@@ -39,7 +40,10 @@ def compress():
             continue
 
         img = Image.open(file)
-        img.save(name + "_compressed" + ext, quality=compress_value)
+        if settings.output_folder != "":
+            img.save(os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext), quality=compress_value)
+        else:
+            img.save(name + "_compressed" + ext, quality=compress_value)
 
         total_before += os.path.getsize(file)
         total_after += os.path.getsize(name + "_compressed" + ext)

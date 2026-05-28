@@ -58,9 +58,12 @@ python main.py
 ## Roadmap
 
 - [x] Dark mode (1.2.0)
-- [ ] Custom output folder (1.4.0)
+- [x] Settings menu (1.3.0)
+- [x] Custom output folder (1.4.0)
+- [ ] Settings saver (1.4.x)
 - [ ] File counter (1.5.0)
 - [ ] Button to clear photo list (1.6.0)
+- [ ] Compressed file size next to file name (1.6.x)
 - [ ] Thumbnails of photos (1.7.0)
 - [ ] Optimization (1.8.0)
 - [ ] EXIF metadata preservation (1.9.0)
