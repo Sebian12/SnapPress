@@ -62,7 +62,7 @@ python main.py
 - [x] Custom output folder (1.4.0)
 - [x] Settings saver (1.5.0)
 - [x] File counter (1.5.0)
-- [ ] Button to clear photo list or single photo (1.5.0)
+- [x] Button to clear photo list or single photo (1.5.0)
 - [ ] Compressed file size next to file name (1.6.0)
 - [ ] Thumbnails of photos (1.7.0)
 - [ ] Optimization (1.8.0)

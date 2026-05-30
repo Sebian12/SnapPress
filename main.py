@@ -4,8 +4,6 @@ from tkinter import filedialog, messagebox
 from PIL import Image
 import settings, config
 
-# 1.5.0: - removed unnecessary import from main, - unsupported file no longer clears entire list during compression, - Fixed bug with .png compressing, it didn't work always, - prevent duplicate files from being added to the list, - Added settings saver for both theme and output folder, - Added file counter, - Added button to clear all images from list, and buttons to remove only one.
-
 selected_files = []
 settings_win = None
 
@@ -25,14 +23,12 @@ def select_photos():
     if filename:
         for file in filename:
             if file not in selected_files:
-                global photos_counter
                 row = ctk.CTkFrame(files_frame, fg_color="transparent")
                 ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r)).pack(
                     side="right", pady=5)
                 ctk.CTkLabel(row, text=os.path.basename(file)).pack(side="left", padx=10)
                 row.pack(fill="x")
                 selected_files.append(file)
-                row.pack()
             else:
                 skipped += 1
             counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
@@ -50,6 +46,11 @@ def compress():
     total_after = 0
 
     compress_value = int(quality.get())
+
+    if settings.output_folder != "":
+        pass
+    else:
+        messagebox.showinfo("WARNING01", "Output folder not specified! File saved in same folder as original file!")
 
     for i, file in enumerate(selected_files):
         name, ext = os.path.splitext(file)
@@ -72,7 +73,6 @@ def compress():
         if settings.output_folder != "":
             output_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
         else:
-            messagebox.showinfo("WARNING01", "Output folder not specified! File saved in same folder as original file!")
             output_path = name + "_compressed" + ext
 
         # Compression is different in .jpg and .png
