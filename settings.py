@@ -1,5 +1,5 @@
 from tkinter import filedialog, messagebox
-
+import config
 import customtkinter as ctk
 
 b_mode = "light"
@@ -13,6 +13,7 @@ def theme(mode):
     else:
         b_mode = "light"
         ctk.set_appearance_mode(b_mode)
+    config.save_config(b_mode, output_folder)
 
 def select_folder(label):
     global output_folder
@@ -22,6 +23,7 @@ def select_folder(label):
         messagebox.showinfo("Done", "Selected output folder: " + output_folder)
     else:
         label.configure(text="No folder selected")
+    config.save_config(b_mode, output_folder)
 
 def open_settings():
     # Logic
