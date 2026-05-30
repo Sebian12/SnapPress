@@ -6,6 +6,7 @@ import settings, config
 
 selected_files = []
 settings_win = None
+file_labels = {}
 
 settings_saver = config.load_config()
 settings.b_mode = settings_saver["b_mode"]
@@ -13,6 +14,7 @@ settings.output_folder = settings_saver["output_folder"]
 
 def remove_file(file, row):
     selected_files.remove(file)
+    del file_labels[file]
     row.destroy()
     counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
 
@@ -26,7 +28,9 @@ def select_photos():
                 row = ctk.CTkFrame(files_frame, fg_color="transparent")
                 ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r)).pack(
                     side="right", pady=5)
-                ctk.CTkLabel(row, text=os.path.basename(file)).pack(side="left", padx=10)
+                lbl = ctk.CTkLabel(row, text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024 * 1024):.2f} MB")
+                lbl.pack(side="left", padx=10)
+                file_labels[file] = lbl
                 row.pack(fill="x")
                 selected_files.append(file)
             else:
@@ -78,8 +82,10 @@ def compress():
         # Compression is different in .jpg and .png
         if ext.lower() in [".jpg", ".jpeg"]:
             img.save(output_path, quality=compress_value)
+            file_labels[file].configure(text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024*1024):.2f} MB → {os.path.getsize(output_path) / (1024*1024):.2f} MB")
         elif ext.lower() == ".png":
             img.save(output_path, optimize=True, compress_level=compress_value // 10)
+            file_labels[file].configure(text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024*1024):.2f} MB → {os.path.getsize(output_path) / (1024*1024):.2f} MB")
         img.close()
 
         total_before += os.path.getsize(file)
@@ -98,12 +104,6 @@ def compress():
 
     messagebox.showinfo("Done", "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
 
-    # Clears list
-    selected_files.clear()
-    for widget in files_frame.winfo_children():
-        widget.destroy()
-    counter_lbl.configure(text="Selected files: 0")
-
 # Function that updates quality label
 def update_label(value):
     qualityLbl.configure(text=f"Quality: {int(value)}")
@@ -120,6 +120,7 @@ def clear_list():
     global selected_files
 
     selected_files.clear()
+    file_labels.clear()
     for widget in files_frame.winfo_children():
         widget.destroy()
     counter_lbl.configure(text="Selected files: 0")
