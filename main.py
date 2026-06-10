@@ -14,6 +14,7 @@ thumbnail_refs = {}
 settings_saver = config.load_config()
 settings.b_mode = settings_saver["b_mode"]
 settings.output_folder = settings_saver["output_folder"]
+settings.thumb_size = settings_saver["thumb_size"]
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -37,8 +38,8 @@ def select_photos():
 
                 try:
                     thumbnails = Image.open(file)
-                    thumbnails.thumbnail((100, 100))
-                    thumb_img = ctk.CTkImage(light_image=thumbnails, dark_image=thumbnails, size=(100, 100))
+                    thumbnails.thumbnail((settings.thumb_size, settings.thumb_size))
+                    thumb_img = ctk.CTkImage(light_image=thumbnails, dark_image=thumbnails, size=(settings.thumb_size, settings.thumb_size))
                     thumb_lbl = ctk.CTkLabel(row, image=thumb_img, text="")
                     thumb_lbl.pack(side="left", padx=10, pady=10)
                     thumbnail_refs[file] = thumb_img

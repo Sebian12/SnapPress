@@ -4,16 +4,17 @@ import customtkinter as ctk
 
 b_mode = "light"
 output_folder = ""
+thumb_size = 100
 
 def theme(mode):
     global b_mode
-    if (mode == "light"):
+    if mode == "light":
         b_mode = "dark"
         ctk.set_appearance_mode(b_mode)
     else:
         b_mode = "light"
         ctk.set_appearance_mode(b_mode)
-    config.save_config(b_mode, output_folder)
+    config.save_config(b_mode, output_folder, thumb_size)
 
 def select_folder(label):
     global output_folder
@@ -23,7 +24,13 @@ def select_folder(label):
         output_folder = chosen_folder
         label.configure(text=output_folder)
         messagebox.showinfo("Done", "Selected output folder: " + output_folder)
-        config.save_config(b_mode, output_folder)
+        config.save_config(b_mode, output_folder, thumb_size)
+
+def updateThumbnailSize(value, label):
+    global thumb_size
+    thumb_size = value
+    label.configure(text=f"Thumbnail size: {int(value)}")
+    config.save_config(b_mode, output_folder, thumb_size)
 
 def open_settings():
     # Logic
@@ -36,10 +43,17 @@ def open_settings():
     switch = ctk.CTkSwitch(settings_window, text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
     folder_label = ctk.CTkLabel(settings_window, text=output_folder if output_folder != "" else "No folder selected")
     folder_button = ctk.CTkButton(settings_window, text="Select output folder",command=lambda: select_folder(folder_label))
+    thumbSize_label = ctk.CTkLabel(settings_window, text=f"Thumbnail size: {int(thumb_size)}")
+    thumbSize_slider = ctk.CTkSlider(settings_window, from_=50, to=200, command=lambda v: updateThumbnailSize(v, thumbSize_label))
+    thumbSize_slider.set(thumb_size)
     # What you can see
 
     switch.pack(side="top", fill="x", padx=10, pady=10)
+
     folder_button.pack(side="bottom", fill="x", padx=10, pady=5)
     folder_label.pack(side="bottom", fill="x", padx=10, pady=1)
+
+    thumbSize_slider.pack(side="bottom", fill="x", padx=10, pady=20)
+    thumbSize_label.pack(side="bottom", fill="x", padx=10, pady=1)
 
     return settings_window

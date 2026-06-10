@@ -66,7 +66,7 @@ python main.py
 - [x] Compressed file size next to file name (1.6.0)
 - [x] Thumbnails of photos (1.7.0)
 - [x] App logo (1.7.1)
-- [ ] User set thumbnail size (1.7.2)
+- [x] User set thumbnail size (1.7.2)
 - [ ] Optimization (1.8.x)
 - [ ] EXIF metadata preservation (1.9.0)
 - [ ] Drag & Drop support (1.10.0)
