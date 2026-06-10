@@ -2,6 +2,7 @@ import os
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from PIL import Image
+import sys
 
 import settings, config
 
@@ -13,6 +14,11 @@ thumbnail_refs = {}
 settings_saver = config.load_config()
 settings.b_mode = settings_saver["b_mode"]
 settings.output_folder = settings_saver["output_folder"]
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 def remove_file(file, row):
     selected_files.remove(file)
@@ -150,7 +156,8 @@ ctk.set_default_color_theme("blue")
 
 # Basic app structure
 app = ctk.CTk()
-app.title("Photo Compressor")
+app.title("SnapPress")
+app.iconbitmap(resource_path("assets/logo.ico"))
 app.geometry("600x750")
 
 # Settings
