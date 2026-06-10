@@ -17,13 +17,13 @@ def theme(mode):
 
 def select_folder(label):
     global output_folder
-    output_folder = filedialog.askdirectory(initialdir="/", title="Select output folder")
-    if output_folder:
+    chosen_folder = filedialog.askdirectory(initialdir="/", title="Select output folder")
+
+    if chosen_folder:
+        output_folder = chosen_folder
         label.configure(text=output_folder)
         messagebox.showinfo("Done", "Selected output folder: " + output_folder)
-    else:
-        label.configure(text="No folder selected")
-    config.save_config(b_mode, output_folder)
+        config.save_config(b_mode, output_folder)
 
 def open_settings():
     # Logic

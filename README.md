@@ -63,11 +63,14 @@ python main.py
 - [x] Settings saver (1.5.0)
 - [x] File counter (1.5.0)
 - [x] Button to clear photo list or single photo (1.5.0)
-- [ ] Compressed file size next to file name (1.6.0)
-- [ ] Thumbnails of photos (1.7.0)
+- [x] Compressed file size next to file name (1.6.0)
+- [x] Thumbnails of photos (1.7.0)
+- [ ] App logo (1.7.x)
+- [ ] User set thumbnail size (1.7.x)
 - [ ] Optimization (1.8.0)
 - [ ] EXIF metadata preservation (1.9.0)
 - [ ] Drag & Drop support (1.10.0)
+- [ ] Multithreading (1.11.0)
 - [ ] Android port (2.0.0)
 
 ## Tech stack

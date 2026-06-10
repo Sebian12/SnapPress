@@ -2,11 +2,13 @@ import os
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from PIL import Image
+
 import settings, config
 
 selected_files = []
 settings_win = None
 file_labels = {}
+thumbnail_refs = {}
 
 settings_saver = config.load_config()
 settings.b_mode = settings_saver["b_mode"]
@@ -26,6 +28,18 @@ def select_photos():
         for file in filename:
             if file not in selected_files:
                 row = ctk.CTkFrame(files_frame, fg_color="transparent")
+
+                try:
+                    thumbnails = Image.open(file)
+                    thumbnails.thumbnail((100, 100))
+                    thumb_img = ctk.CTkImage(light_image=thumbnails, dark_image=thumbnails, size=(100, 100))
+                    thumb_lbl = ctk.CTkLabel(row, image=thumb_img, text="")
+                    thumb_lbl.pack(side="left", padx=10, pady=10)
+                    thumbnail_refs[file] = thumb_img
+                except (OSError, Image.UnidentifiedImageError):
+                    messagebox.showinfo("ERROR05", "Cannot load thumbnail for: " + os.path.basename(file))
+                    continue
+
                 ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r)).pack(
                     side="right", pady=5)
                 lbl = ctk.CTkLabel(row, text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024 * 1024):.2f} MB")
@@ -41,6 +55,7 @@ def select_photos():
 
 # Function that compresses photos
 def compress():
+    progress.set(0)
     # Checks if user gave any files
     if not selected_files:
         messagebox.showinfo("ERROR01", "No photos selected!")
@@ -72,7 +87,11 @@ def compress():
             messagebox.showinfo("ERROR03", "File  " + os.path.basename(file) + "  doesn't exist!")
             continue
 
-        img = Image.open(file)
+        try:
+            img = Image.open(file)
+        except (OSError, Image.UnidentifiedImageError):
+            messagebox.showinfo("ERROR04", "File corrupted or doesn't exist!")
+            continue
         # Checking if user selected output folder
         if settings.output_folder != "":
             output_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
@@ -124,6 +143,7 @@ def clear_list():
     for widget in files_frame.winfo_children():
         widget.destroy()
     counter_lbl.configure(text="Selected files: 0")
+    progress.set(0)
 # Theme
 ctk.set_appearance_mode(settings.b_mode)
 ctk.set_default_color_theme("blue")
@@ -182,7 +202,7 @@ before_space_lbl.pack(anchor="w", padx=10, pady=10)
 after_space_frame = ctk.CTkFrame(stats_frame, height=60, border_width=2)
 after_space_frame.pack(side="right", expand=True, fill="x", padx=(5, 0))
 
-after_space_lbl = ctk.CTkLabel(after_space_frame, text="Saved: -", font=("Arial", 13))
+after_space_lbl = ctk.CTkLabel(after_space_frame, text="New size: -", font=("Arial", 13))
 after_space_lbl.pack(anchor="w", padx=10, pady=10)
 
 # Shows compress progress
