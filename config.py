@@ -16,7 +16,12 @@ def load_config():
     if os.path.exists(CONFIG_FILE):
         try:
             with open(CONFIG_FILE, "r") as f:
-                return json.load(f)
+                data = json.load(f)
+                return {
+                    "b_mode": data.get("b_mode", "light"),
+                    "output_folder": data.get("output_folder", ""),
+                    "thumb_size": data.get("thumb_size", 100)
+                }
         except (json.JSONDecodeError, KeyError):
             pass
-    return {"b_mode": "light", "output_folder": "", "thumb_size": ""}
+    return {"b_mode": "light", "output_folder": "", "thumb_size": 100}

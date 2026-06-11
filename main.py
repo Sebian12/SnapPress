@@ -14,7 +14,7 @@ thumbnail_refs = {}
 settings_saver = config.load_config()
 settings.b_mode = settings_saver["b_mode"]
 settings.output_folder = settings_saver["output_folder"]
-settings.thumb_size = settings_saver["thumb_size"]
+settings.thumb_size = settings_saver.get("thumb_size", 100)
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
