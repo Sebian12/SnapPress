@@ -48,6 +48,25 @@ python main.py
 
 1. Download .exe file from current release
 
+
+## Native Linux Support
+
+A native Linux binary is available starting from v1.8.1. It was built and tested on Zorin OS 18.1 (Ubuntu-based).
+
+**Note:** the binary may not run on distributions with an older glibc version or on minimal/non-glibc systems (e.g. Alpine). It may also have issues on pure Wayland sessions without XWayland.
+
+If the binary doesn't work on your system, you can run from source:
+```bash
+pip install customtkinter Pillow
+python3 main.py
+```
+
+## Linux only (native binary)
+
+1. Download the Linux binary from current release
+2. Make it executable `chmod +x SnapPress`
+3. Run: `./SnapPress`
+
 ## Usage
 
 1. Drag and drop photos into the window, or click **Choose photos**

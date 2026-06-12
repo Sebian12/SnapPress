@@ -1,8 +1,9 @@
 import os
 import customtkinter as ctk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, PhotoImage
 from PIL import Image
 import sys
+import platform
 
 import settings, config
 
@@ -140,10 +141,10 @@ def update_label(value):
     qualityLbl.configure(text=f"Quality: {int(value)}")
 
 # Function that shows settings window
-def show_settings():
+def show_settings(app):
     global settings_win
     if settings_win == None or not settings_win.winfo_exists():
-        settings_win = settings.open_settings()
+        settings_win = settings.open_settings(app)
 
 def clear_list():
     global selected_files
@@ -163,11 +164,17 @@ ctk.set_default_color_theme("blue")
 # Basic app structure
 app = ctk.CTk()
 app.title("SnapPress")
-app.iconbitmap(resource_path("assets/logo.ico"))
+
+if platform.system() == "Windows":
+    app.iconbitmap(resource_path("assets/logo.ico"))
+else:
+    icon_img = PhotoImage(file=resource_path("assets/logo.png"))
+    app.iconphoto(True, icon_img)
+
 app.geometry("600x750")
 
 # Settings
-settings_button = ctk.CTkButton(app, text="Settings", command=show_settings)
+settings_button = ctk.CTkButton(app, text="Settings", command=lambda: show_settings(app))
 settings_button.pack(padx=10, pady=10, fill="x")
 
 # Drag & Drop (also clickable)
