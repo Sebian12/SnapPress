@@ -16,6 +16,8 @@ settings.b_mode = settings_saver["b_mode"]
 settings.output_folder = settings_saver["output_folder"]
 settings.thumb_size = settings_saver.get("thumb_size", 100)
 
+MB = 1024 * 1024
+
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
@@ -43,13 +45,14 @@ def select_photos():
                     thumb_lbl = ctk.CTkLabel(row, image=thumb_img, text="")
                     thumb_lbl.pack(side="left", padx=10, pady=10)
                     thumbnail_refs[file] = thumb_img
+
                 except (OSError, Image.UnidentifiedImageError):
                     messagebox.showinfo("ERROR05", "Cannot load thumbnail for: " + os.path.basename(file))
                     continue
 
                 ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r)).pack(
                     side="right", pady=5)
-                lbl = ctk.CTkLabel(row, text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024 * 1024):.2f} MB")
+                lbl = ctk.CTkLabel(row, text=f"{os.path.basename(file)} — {os.path.getsize(file) / MB:.2f} MB")
                 lbl.pack(side="left", padx=10)
                 file_labels[file] = lbl
                 row.pack(fill="x")
@@ -73,13 +76,14 @@ def compress():
 
     compress_value = int(quality.get())
 
-    if settings.output_folder != "":
-        pass
-    else:
+    if settings.output_folder == "":
         messagebox.showinfo("WARNING01", "Output folder not specified! File saved in same folder as original file!")
+    else:
+        pass
 
     for i, file in enumerate(selected_files):
         name, ext = os.path.splitext(file)
+        file_size = os.path.getsize(file)
 
         # Checks file type
         if ext.lower() not in [".jpg", ".jpeg", ".png"]:
@@ -87,13 +91,12 @@ def compress():
             continue
 
         # Checks if file exists
-        if os.path.exists(file):
-            pass
-        else:
+        if not os.path.exists(file):
             # If not throws an error
             messagebox.showinfo("ERROR03", "File  " + os.path.basename(file) + "  doesn't exist!")
             continue
-
+        else:
+            pass
         try:
             img = Image.open(file)
         except (OSError, Image.UnidentifiedImageError):
@@ -108,25 +111,27 @@ def compress():
         # Compression is different in .jpg and .png
         if ext.lower() in [".jpg", ".jpeg"]:
             img.save(output_path, quality=compress_value)
-            file_labels[file].configure(text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024*1024):.2f} MB → {os.path.getsize(output_path) / (1024*1024):.2f} MB")
         elif ext.lower() == ".png":
             img.save(output_path, optimize=True, compress_level=compress_value // 10)
-            file_labels[file].configure(text=f"{os.path.basename(file)} — {os.path.getsize(file) / (1024*1024):.2f} MB → {os.path.getsize(output_path) / (1024*1024):.2f} MB")
+
+        file_size_after = os.path.getsize(output_path)
+        file_labels[file].configure(text=f"{os.path.basename(file)} — {file_size / MB:.2f} MB → {file_size_after / MB:.2f} MB")
+
         img.close()
 
-        total_before += os.path.getsize(file)
-        total_after += os.path.getsize(output_path)
+        total_before += file_size
+        total_after += file_size_after
 
         progress.set((i + 1) / len(selected_files))
         progress.update()
 
     # Calculating space
     if total_before == 0: return
-    total_difference = (total_before - total_after) / (1024 * 1024)
+    total_difference = (total_before - total_after) / MB
     total_difference_percent = (total_before - total_after) / total_before * 100
 
-    before_space_lbl.configure(text=f"Before compression: {total_before / (1024 * 1024):.2f}MB")
-    after_space_lbl.configure(text=f"New size: {(total_before / (1024 * 1024)) - total_difference:.2f}MB")
+    before_space_lbl.configure(text=f"Before compression: {total_before / MB:.2f}MB")
+    after_space_lbl.configure(text=f"New size: {(total_before / MB) - total_difference:.2f}MB")
 
     messagebox.showinfo("Done", "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
 
@@ -139,18 +144,18 @@ def show_settings():
     global settings_win
     if settings_win == None or not settings_win.winfo_exists():
         settings_win = settings.open_settings()
-    else:
-        pass
 
 def clear_list():
     global selected_files
 
     selected_files.clear()
     file_labels.clear()
+    thumbnail_refs.clear()
     for widget in files_frame.winfo_children():
         widget.destroy()
     counter_lbl.configure(text="Selected files: 0")
     progress.set(0)
+
 # Theme
 ctk.set_appearance_mode(settings.b_mode)
 ctk.set_default_color_theme("blue")

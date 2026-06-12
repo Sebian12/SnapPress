@@ -1,7 +1,11 @@
 import json
 import os
+import sys
 
-CONFIG_FILE = "config.json"
+if hasattr(sys, '_MEIPASS'):
+    CONFIG_FILE = os.path.join(os.path.dirname(sys.executable), "config.json")
+else:
+    CONFIG_FILE = "config.json"
 
 def save_config(b_mode, output_folder, thumb_size):
     config_data = {

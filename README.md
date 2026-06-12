@@ -67,7 +67,7 @@ python main.py
 - [x] Thumbnails of photos (1.7.0)
 - [x] App logo (1.7.1)
 - [x] User set thumbnail size (1.7.2)
-- [ ] Optimization (1.8.x)
+- [x] Optimization (1.8.0)
 - [ ] EXIF metadata preservation (1.9.0)
 - [ ] Drag & Drop support (1.10.0)
 - [ ] Multithreading (1.11.0)
