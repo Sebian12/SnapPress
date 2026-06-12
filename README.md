@@ -16,6 +16,7 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 ## Screenshots
 
 ![Empty](assets/empty.png)
+![Empty-zorin](assets/linux-zorin.png)
 ![Dark mode](assets/dark_mode.png)
 ![After compression](assets/one_file_comp.png)
 ![Multiple files](assets/multiple_files_comp.png)
