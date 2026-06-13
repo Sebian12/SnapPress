@@ -77,6 +77,7 @@ python3 main.py
 
 ## Roadmap
 
+- [x] Switched from tkinter to customtkinter
 - [x] Dark mode (1.2.0)
 - [x] Settings menu (1.3.0)
 - [x] Custom output folder (1.4.0)
@@ -89,8 +90,11 @@ python3 main.py
 - [x] User set thumbnail size (1.7.2)
 - [x] Optimization (1.8.0)
 - [ ] EXIF metadata preservation (1.9.0)
-- [ ] Drag & Drop support (1.10.0)
-- [ ] Multithreading (1.11.0)
+- [ ] Granular metadata control in settings (sliders/checkboxes to choose which EXIF tags to keep) (1.10.0)
+- [ ] Drag & Drop support (1.11.0)
+- [ ] Multithreading (1.12.0)
+- [ ] New file format support (1.13.0)
+- [ ] Pack compressed photos to zip (1.14.0)
 - [ ] Android port (2.0.0)
 
 ## Tech stack
