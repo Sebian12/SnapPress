@@ -79,8 +79,6 @@ def compress():
 
     if settings.output_folder == "":
         messagebox.showinfo("WARNING01", "Output folder not specified! File saved in same folder as original file!")
-    else:
-        pass
 
     for i, file in enumerate(selected_files):
         name, ext = os.path.splitext(file)
@@ -96,8 +94,6 @@ def compress():
             # If not throws an error
             messagebox.showinfo("ERROR03", "File  " + os.path.basename(file) + "  doesn't exist!")
             continue
-        else:
-            pass
         try:
             img = Image.open(file)
         except (OSError, Image.UnidentifiedImageError):

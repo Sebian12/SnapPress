@@ -36,13 +36,8 @@ def open_settings(app):
     # Logic
     settings_window = ctk.CTkToplevel()
     settings_window.title("Settings")
-    settings_window.transient(app)
     settings_window.geometry("300x375")
-
-    settings_window.protocol("WM_DELETE_WINDOW", lambda: [
-        config.save_config(b_mode, output_folder, thumb_size),
-        settings_window.destroy()
-    ])
+    settings_window.attributes("-topmost", True)
 
     switch_var = ctk.IntVar(value=1 if b_mode == "dark" else 0)
     switch = ctk.CTkSwitch(settings_window, text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
