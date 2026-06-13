@@ -52,7 +52,7 @@ python main.py
 
 ## Native Linux Support
 
-A native Linux binary is available starting from v1.8.1. It was built and tested on Zorin OS 18.1 (Ubuntu-based).
+A native Linux binary is available starting from v1.8.1. It was built and tested on Zorin OS 18.1 GNOME (Ubuntu-based), v1.8.4 built and tested on Fedora Linux 44 KDE, v1.8.5 built and tested on Manjaro 26.04 XFCE.
 
 **Note:** the binary may not run on distributions with an older glibc version or on minimal/non-glibc systems (e.g. Alpine). It may also have issues on pure Wayland sessions without XWayland.
 
