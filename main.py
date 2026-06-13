@@ -161,6 +161,7 @@ ctk.set_default_color_theme("blue")
 app = ctk.CTk()
 app.title("SnapPress")
 
+# Windows -> main window and taskbar, Zorin (ubuntu-based) -> nowhere, Fedora -> Main window, settings window and taskbar
 if platform.system() == "Windows":
     app.iconbitmap(resource_path("assets/logo.ico"))
 else:
