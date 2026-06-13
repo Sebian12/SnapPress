@@ -1,4 +1,4 @@
-# Photo Compressor
+# SnapPress
 
 A desktop application for compressing JPEG and PNG photos without visible quality loss. Built with Python and customtkinter.
 
@@ -12,6 +12,7 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 - Progress bar with live feedback
 - Savings summary (before / after)
 - Saves compressed files next to originals — originals are never overwritten
+- Settings menu with custom output folder and adjustable thumbnail size
 
 ## Screenshots
 
@@ -50,9 +51,18 @@ python main.py
 1. Download .exe file from current release
 
 
+## Linux only (native binary)
+
+1. Download the Linux binary from current release
+2. Make it executable `chmod +x SnapPress`
+3. Run: `./SnapPress`
+
+
 ## Native Linux Support
 
-A native Linux binary is available starting from v1.8.1. It was built and tested on Zorin OS 18.1 GNOME (Ubuntu-based), v1.8.4 built and tested on Fedora Linux 44 KDE, v1.8.5 built and tested on Manjaro 26.04 XFCE.
+A native Linux binary is available starting from v1.8.1. It was built and tested on Zorin OS 18.1 GNOME (Ubuntu-based), v1.8.4 built and tested on Fedora Linux 44 KDE.
+
+Since v1.9.0, every release comes with an .exe file for Windows (oldest tested Windows version is Windows 7), a binary for Ubuntu-based systems, and a binary for Fedora-based systems.
 
 **Note:** the binary may not run on distributions with an older glibc version or on minimal/non-glibc systems (e.g. Alpine). It may also have issues on pure Wayland sessions without XWayland.
 
@@ -62,22 +72,16 @@ pip install customtkinter Pillow
 python3 main.py
 ```
 
-## Linux only (native binary)
-
-1. Download the Linux binary from current release
-2. Make it executable `chmod +x SnapPress`
-3. Run: `./SnapPress`
-
 ## Usage
 
-1. Drag and drop photos into the window, or click **Choose photos**
+1. Click **Choose photos** to select files
 2. Adjust the quality slider (default: 80%)
 3. Click **Compress and save**
 4. Compressed files are saved in the same folder as the originals with a `_compressed` suffix or saved in selected folder
 
 ## Roadmap
 
-- [x] Switched from tkinter to customtkinter
+- [x] Switch from tkinter to customtkinter
 - [x] Dark mode (1.2.0)
 - [x] Settings menu (1.3.0)
 - [x] Custom output folder (1.4.0)
