@@ -26,11 +26,9 @@ def update_thumbnail_size(value, label):
 
 def select_folder(label):
     global output_folder
-    if platform.system() == "Windows":
-        chosen_folder = filedialog.askdirectory(initialdir="/", title="Select output folder")
-    else:
-        chosen_folder = filedialog.askdirectory(initialdir="/home", title="Select output folder")
-
+    initial_dir = "/" if platform.system() == "Windows" else "/home"
+    chosen_folder = filedialog.askdirectory(initialdir=initial_dir, title="Select output folder")
+    
     if chosen_folder:
         output_folder = chosen_folder
         label.configure(text=output_folder)
