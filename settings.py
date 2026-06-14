@@ -32,7 +32,7 @@ def select_folder(label):
         messagebox.showinfo("Done", "Selected output folder: " + output_folder)
         config.save_config(b_mode, output_folder, thumb_size)
 
-def open_settings():
+def open_settings(app):
     # Logic
     settings_window = ctk.CTkToplevel()
     settings_window.title("Settings")
