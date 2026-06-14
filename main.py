@@ -26,6 +26,7 @@ def resource_path(relative_path):
 
 def remove_file(file, row):
     selected_files.remove(file)
+    del thumbnail_refs[file]
     del file_labels[file]
     row.destroy()
     counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
@@ -139,7 +140,7 @@ def update_label(value):
 # Function that shows settings window
 def show_settings(app):
     global settings_win
-    if settings_win == None or not settings_win.winfo_exists():
+    if settings_win is None or not settings_win.winfo_exists():
         settings_win = settings.open_settings(app)
 
 def clear_list():
@@ -161,11 +162,11 @@ ctk.set_default_color_theme("blue")
 app = ctk.CTk()
 app.title("SnapPress")
 
-# Windows -> main window and taskbar, Zorin (ubuntu-based) -> nowhere, Fedora -> Main window, settings window and taskbar
 if platform.system() == "Windows":
     app.iconbitmap(resource_path("assets/logo.ico"))
 else:
     icon_img = PhotoImage(file=resource_path("assets/logo.png"))
+    app.icon_img = icon_img
     app.iconphoto(True, icon_img)
 
 app.geometry("600x750")
