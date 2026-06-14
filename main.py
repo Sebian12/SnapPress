@@ -64,7 +64,7 @@ def select_photos():
                 skipped += 1
             counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
         if skipped > 0:
-            CTkMessagebox(title="WARNING02", message="{skipped} file(s) already selected!")
+            CTkMessagebox(title="WARNING02", message=f"{skipped} file(s) already selected!")
 
 # Function that compresses photos
 def compress():
@@ -98,6 +98,7 @@ def compress():
             continue
         try:
             img = Image.open(file)
+            exif_data = img.info.get("exif")
         except (OSError, Image.UnidentifiedImageError):
             CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!")
             continue
@@ -109,8 +110,12 @@ def compress():
 
         # Compression is different in .jpg and .png
         if ext.lower() in [".jpg", ".jpeg"]:
-            img.save(output_path, quality=compress_value)
+            if exif_data is not None:
+                img.save(output_path, quality=compress_value, exif=exif_data)
+            else:
+                img.save(output_path, quality=compress_value)
         elif ext.lower() == ".png":
+            # exif metadata is not supported yet.
             img.save(output_path, optimize=True, compress_level=compress_value // 10)
 
         file_size_after = os.path.getsize(output_path)
