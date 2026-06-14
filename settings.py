@@ -2,6 +2,7 @@ from tkinter import filedialog
 from CTkMessagebox import CTkMessagebox
 import config
 import customtkinter as ctk
+import platform
 
 b_mode = "light"
 output_folder = ""
@@ -25,7 +26,10 @@ def update_thumbnail_size(value, label):
 
 def select_folder(label):
     global output_folder
-    chosen_folder = filedialog.askdirectory(initialdir="/", title="Select output folder")
+    if platform.system() == "Windows":
+        chosen_folder = filedialog.askdirectory(initialdir="/", title="Select output folder")
+    else:
+        chosen_folder = filedialog.askdirectory(initialdir="/home", title="Select output folder")
 
     if chosen_folder:
         output_folder = chosen_folder

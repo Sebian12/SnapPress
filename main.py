@@ -35,7 +35,16 @@ def remove_file(file, row):
 # Function to select files
 def select_photos():
     skipped = 0
-    filename = filedialog.askopenfilenames(initialdir="/", title="Select file",filetypes=(("Photos", "*.png *.jpg *.jpeg"), ("All Files", "*.*")))
+    if platform.system() == "Windows":
+        filetypes = (("Photos", "*.png *.jpg *.jpeg"), ("All Files", "*.*"))
+        initial_dir = "/"
+    else:
+        filetypes = (("All Files", "*.*"), ("Photos", "*.png *.jpg *.jpeg"))
+        # starting from /home in Linux because starting from / is not user-friendly
+        initial_dir = "/home"
+
+    filename = filedialog.askopenfilenames(initialdir=initial_dir, title="Select file", filetypes=filetypes)
+
     if filename:
         for file in filename:
             if file not in selected_files:
