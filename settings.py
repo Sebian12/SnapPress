@@ -1,4 +1,5 @@
-from tkinter import filedialog, messagebox
+from tkinter import filedialog
+from CTkMessagebox import CTkMessagebox
 import config
 import customtkinter as ctk
 
@@ -29,7 +30,7 @@ def select_folder(label):
     if chosen_folder:
         output_folder = chosen_folder
         label.configure(text=output_folder)
-        messagebox.showinfo("Done", "Selected output folder: " + output_folder)
+        CTkMessagebox(title="Done", message="Selected output folder: " + output_folder)
         config.save_config(b_mode, output_folder, thumb_size)
 
 def open_settings(app):

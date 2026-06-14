@@ -32,13 +32,13 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 ### Universal (Windows, macOS, Linux)
 1. Clone the repository:
 ```bash
-git clone https://github.com/Sebian12/photo-compressor.git
-cd photo-compressor
+git clone https://github.com/Sebian12/SnapPress.git
+cd SnapPress
 ```
 
 2. Install dependencies:
 ```bash
-pip install Pillow
+pip install Pillow customtkinter CTkMessagebox
 ```
 
 3. Run the app:
@@ -68,7 +68,7 @@ Since v1.9.0, every release comes with an .exe file for Windows (oldest tested W
 
 If the binary doesn't work on your system, you can run from source:
 ```bash
-pip install customtkinter Pillow
+pip install Pillow customtkinter CTkMessagebox
 python3 main.py
 ```
 
@@ -106,6 +106,7 @@ python3 main.py
 - Python 3.14
 - customtkinter — GUI
 - Pillow — image processing
+- CTkMessageBox
 
 ## License
 

@@ -1,6 +1,7 @@
 import os
 import customtkinter as ctk
-from tkinter import filedialog, messagebox, PhotoImage
+from tkinter import filedialog, PhotoImage
+from CTkMessagebox import CTkMessagebox
 from PIL import Image
 import sys
 import platform
@@ -49,7 +50,7 @@ def select_photos():
                     thumbnail_refs[file] = thumb_img
 
                 except (OSError, Image.UnidentifiedImageError):
-                    messagebox.showinfo("ERROR05", "Cannot load thumbnail for: " + os.path.basename(file))
+                    CTkMessagebox(title="ERROR05", message="Cannot load thumbnail for: " + os.path.basename(file))
                     continue
 
                 ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r)).pack(
@@ -63,14 +64,14 @@ def select_photos():
                 skipped += 1
             counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
         if skipped > 0:
-            messagebox.showinfo("WARNING02", f"{skipped} file(s) already selected!")
+            CTkMessagebox(title="WARNING02", message="{skipped} file(s) already selected!")
 
 # Function that compresses photos
 def compress():
     progress.set(0)
     # Checks if user gave any files
     if not selected_files:
-        messagebox.showinfo("ERROR01", "No photos selected!")
+        CTkMessagebox(title="ERROR01", message="No photos selected!")
         return
 
     total_before = 0
@@ -79,7 +80,7 @@ def compress():
     compress_value = int(quality.get())
 
     if settings.output_folder == "":
-        messagebox.showinfo("WARNING01", "Output folder not specified! File saved in same folder as original file!")
+        CTkMessagebox(title="WARNING01", message="Output folder not specified! File saved in same folder as original file!")
 
     for i, file in enumerate(selected_files):
         name, ext = os.path.splitext(file)
@@ -87,18 +88,18 @@ def compress():
 
         # Checks file type
         if ext.lower() not in [".jpg", ".jpeg", ".png"]:
-            messagebox.showinfo("ERROR02", "File not supported!")
+            CTkMessagebox(title="ERROR02", message="File not supported!")
             continue
 
         # Checks if file exists
         if not os.path.exists(file):
             # If not throws an error
-            messagebox.showinfo("ERROR03", "File  " + os.path.basename(file) + "  doesn't exist!")
+            CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!")
             continue
         try:
             img = Image.open(file)
         except (OSError, Image.UnidentifiedImageError):
-            messagebox.showinfo("ERROR04", "File corrupted or doesn't exist!")
+            CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!")
             continue
         # Checking if user selected output folder
         if settings.output_folder != "":
@@ -131,7 +132,7 @@ def compress():
     before_space_lbl.configure(text=f"Before compression: {total_before / MB:.2f}MB")
     after_space_lbl.configure(text=f"New size: {(total_before / MB) - total_difference:.2f}MB")
 
-    messagebox.showinfo("Done", "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
+    CTkMessagebox(title="Done", message="Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
 
 # Function that updates quality label
 def update_label(value):
