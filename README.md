@@ -93,7 +93,7 @@ python3 main.py
 - [x] App logo (1.7.1)
 - [x] User set thumbnail size (1.7.2)
 - [x] Optimization (1.8.0)
-- [ ] EXIF metadata preservation (1.9.0)
+- [x] EXIF metadata preservation (1.9.0)
 - [ ] Granular metadata control in settings (sliders/checkboxes to choose which EXIF tags to keep) (1.10.0)
 - [ ] Drag & Drop support (1.11.0)
 - [ ] Multithreading (1.12.0)
