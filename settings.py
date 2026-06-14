@@ -4,10 +4,12 @@ import config
 import customtkinter as ctk
 import platform
 
+# Default settings
 b_mode = "light"
 output_folder = ""
 thumb_size = 100
 
+# Function to change theme
 def theme(mode):
     global b_mode
     if mode == "light":
@@ -18,17 +20,20 @@ def theme(mode):
         ctk.set_appearance_mode(b_mode)
     config.save_config(b_mode, output_folder, thumb_size)
 
+# Function to update thumbnail size
 def update_thumbnail_size(value, label):
     global thumb_size
     thumb_size = value
     label.configure(text=f"Thumbnail size: {int(value)}")
     config.save_config(b_mode, output_folder, thumb_size)
 
+# Function to select output folder
 def select_folder(label):
     global output_folder
+    # Using /home for Linux because starting from / is not user-friendly
     initial_dir = "/" if platform.system() == "Windows" else "/home"
     chosen_folder = filedialog.askdirectory(initialdir=initial_dir, title="Select output folder")
-    
+
     if chosen_folder:
         output_folder = chosen_folder
         label.configure(text=output_folder)
@@ -36,7 +41,6 @@ def select_folder(label):
         config.save_config(b_mode, output_folder, thumb_size)
 
 def open_settings(app):
-    # Logic
     settings_window = ctk.CTkToplevel()
     settings_window.title("Settings")
     settings_window.geometry("300x375")

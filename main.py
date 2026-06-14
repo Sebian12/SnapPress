@@ -6,25 +6,31 @@ from PIL import Image
 import sys
 import platform
 
+# File import
 import settings, config
 
+# Important global variables
 selected_files = []
 settings_win = None
 file_labels = {}
 thumbnail_refs = {}
 
+# Load settings
 settings_saver = config.load_config()
 settings.b_mode = settings_saver["b_mode"]
 settings.output_folder = settings_saver["output_folder"]
 settings.thumb_size = settings_saver.get("thumb_size", 100)
 
+# Megabyte constant
 MB = 1024 * 1024
 
+# Function to get logo for taskbar and in window
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
+# Function to remove file from list
 def remove_file(file, row):
     selected_files.remove(file)
     del thumbnail_refs[file]
@@ -39,6 +45,7 @@ def select_photos():
         filetypes = (("Photos", "*.png *.jpg *.jpeg"), ("All Files", "*.*"))
         initial_dir = "/"
     else:
+        # Known issues - while using Photos filter it doesn't see .jpg files
         filetypes = (("All Files", "*.*"), ("Photos", "*.png *.jpg *.jpeg"))
         # starting from /home in Linux because starting from / is not user-friendly
         initial_dir = "/home"
@@ -52,6 +59,7 @@ def select_photos():
 
                 try:
                     thumbnails = Image.open(file)
+                    # Resize thumbnail to the specified size in settings
                     thumbnails.thumbnail((settings.thumb_size, settings.thumb_size))
                     thumb_img = ctk.CTkImage(light_image=thumbnails, dark_image=thumbnails, size=(settings.thumb_size, settings.thumb_size))
                     thumb_lbl = ctk.CTkLabel(row, image=thumb_img, text="")
@@ -158,6 +166,7 @@ def show_settings(app):
     if settings_win is None or not settings_win.winfo_exists():
         settings_win = settings.open_settings(app)
 
+# Function that clears whole list of selected files
 def clear_list():
     global selected_files
 
@@ -200,6 +209,7 @@ drop_label.pack(expand=True, pady=40)
 drop_frame.bind("<Button-1>", lambda e: select_photos())
 drop_label.bind("<Button-1>", lambda e: select_photos())
 
+# Frame with pictures
 counter_frame = ctk.CTkFrame(app, fg_color="transparent")
 counter_frame.pack(padx=20, pady=(10, 0), fill="x")
 
