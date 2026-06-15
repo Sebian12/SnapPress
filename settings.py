@@ -47,7 +47,10 @@ def open_settings(app):
     settings_window.attributes("-topmost", True)
 
     switch_var = ctk.IntVar(value=1 if b_mode == "dark" else 0)
-    switch = ctk.CTkSwitch(settings_window, text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
+    switch_mode = ctk.CTkSwitch(settings_window, text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
+
+    switch_exif = ctk.CTkSwitch(settings_window, text="Preserve EXIF metadata")
+    gps_data = ctk.CTkCheckBox(settings_window, text="GPS data")
 
     folder_label = ctk.CTkLabel(settings_window, text=output_folder if output_folder != "" else "No folder selected")
     folder_button = ctk.CTkButton(settings_window, text="Select output folder",command=lambda: select_folder(folder_label))
@@ -58,7 +61,9 @@ def open_settings(app):
     thumbSize_slider.bind("<ButtonRelease-1>", lambda e: config.save_config(b_mode, output_folder, thumb_size))
 
     # What you can see
-    switch.pack(side="top", fill="x", padx=10, pady=10)
+    switch_mode.pack(side="top", fill="x", padx=10, pady=5)
+    switch_exif.pack(side="top", fill="x", padx=10)
+    gps_data.pack(side="top", fill="x", padx=10, pady=5)
 
     folder_button.pack(side="bottom", fill="x", padx=10, pady=5)
     folder_label.pack(side="bottom", fill="x", padx=10, pady=1)
