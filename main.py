@@ -101,7 +101,6 @@ def compress():
 
     for i, file in enumerate(selected_files):
         name, ext = os.path.splitext(file)
-        file_size = os.path.getsize(file)
 
         # Checks file type
         if ext.lower() not in [".jpg", ".jpeg", ".png"]:
@@ -113,6 +112,7 @@ def compress():
             # If not throws an error
             CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!")
             continue
+        file_size = os.path.getsize(file)
         try:
             img = Image.open(file)
             exif_data = img.info.get("exif")
@@ -176,6 +176,8 @@ def clear_list():
     for widget in files_frame.winfo_children():
         widget.destroy()
     counter_lbl.configure(text="Selected files: 0")
+    before_space_lbl.configure(text="Before: -")
+    after_space_lbl.configure(text="New size: -")
     progress.set(0)
 
 # Theme
