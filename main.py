@@ -20,6 +20,8 @@ settings_saver = config.load_config()
 settings.b_mode = settings_saver["b_mode"]
 settings.output_folder = settings_saver["output_folder"]
 settings.thumb_size = settings_saver.get("thumb_size", 100)
+settings.preserve_exif = settings_saver.get("preserve_exif", False)
+settings.remove_gps = settings_saver.get("remove_gps", False)
 
 # Megabyte constant
 MB = 1024 * 1024
@@ -116,6 +118,11 @@ def compress():
         try:
             img = Image.open(file)
             exif_data = img.info.get("exif")
+
+            if settings.remove_gps:
+                exif_data = img.getexif()
+                exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
+
         except (OSError, Image.UnidentifiedImageError):
             CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!")
             continue
