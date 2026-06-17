@@ -39,6 +39,9 @@ def remove_file(file, row):
     del file_labels[file]
     row.destroy()
     counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
+    before_space_lbl.configure(text="Before: -")
+    after_space_lbl.configure(text="New size: -")
+    progress.set(0)
 
 # Function to select files
 def select_photos():
