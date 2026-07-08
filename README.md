@@ -101,6 +101,15 @@ python3 main.py
 - [ ] Pack compressed photos to zip (1.14.0)
 - [ ] Android port (2.0.0)
 
+## Part of the SnapSuite ecosystem
+
+| App | Platform | Language |
+|-----|----------|----------|
+| [SnapPress](https://github.com/Sebian12/SnapPress) | Windows / Linux / Web | Python / JavaScript |
+| [SnapPress Android](https://github.com/Sebian12/SnapPress-Android) | Android | Kotlin |
+| SnapRename | Windows | C# |
+| SnapRename Android | Android | Kotlin |
+
 ## Tech stack
 
 - Python 3.14
