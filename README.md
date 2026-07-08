@@ -94,7 +94,7 @@ python3 main.py
 - [x] User set thumbnail size (1.7.2)
 - [x] Optimization (1.8.0)
 - [x] EXIF metadata preservation (1.9.0)
-- [ ] Granular metadata control in settings (sliders/checkboxes to choose which EXIF tags to keep) (1.10.0)
+- [x] Granular metadata control in settings (sliders/checkboxes to choose which EXIF tags to keep) (1.10.0)
 - [ ] Drag & Drop support (1.11.0)
 - [ ] Multithreading (1.12.0)
 - [ ] New file format support (1.13.0)
@@ -103,12 +103,12 @@ python3 main.py
 
 ## Part of the SnapSuite ecosystem
 
-| App | Platform | Language |
-|-----|----------|----------|
-| [SnapPress](https://github.com/Sebian12/SnapPress) | Windows / Linux / Web | Python / JavaScript |
+| App                                                                | Platform | Language |
+|--------------------------------------------------------------------|----------|----------|
+| [SnapPress](https://github.com/Sebian12/SnapPress)                 | Windows / Linux / Web | Python / JavaScript |
 | [SnapPress Android](https://github.com/Sebian12/SnapPress-Android) | Android | Kotlin |
-| SnapRename | Windows | C# |
-| SnapRename Android | Android | Kotlin |
+| [SnapRename](https://github.com/Sebian12/SnapRename)               | Windows | C# |
+| SnapRename Android                                                 | Android | Kotlin |
 
 ## Tech stack
 
