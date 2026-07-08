@@ -73,6 +73,7 @@ def select_photos():
 
                 except (OSError, Image.UnidentifiedImageError):
                     CTkMessagebox(title="ERROR05", message="Cannot load thumbnail for: " + os.path.basename(file))
+                    row.destroy()
                     continue
 
                 ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r)).pack(
@@ -120,11 +121,12 @@ def compress():
         file_size = os.path.getsize(file)
         try:
             img = Image.open(file)
-            exif_data = img.info.get("exif")
+            if settings.preserve_exif:
+                exif_data = img.info.get("exif")
 
-            if settings.remove_gps:
-                exif_data = img.getexif()
-                exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
+                if settings.remove_gps:
+                    exif_data = img.getexif()
+                    exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
 
         except (OSError, Image.UnidentifiedImageError):
             CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!")
