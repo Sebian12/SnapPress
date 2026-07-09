@@ -23,8 +23,13 @@ def theme(mode):
     config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
 
 def exif_metadata(gps_data):
-    global preserve_exif
+    global preserve_exif, remove_gps
     preserve_exif = not preserve_exif
+
+    if not preserve_exif and remove_gps:
+        remove_gps = False
+        gps_data.deselect()
+
     config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
     if preserve_exif:
         gps_data.configure(state="normal")
