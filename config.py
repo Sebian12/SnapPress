@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+from CTkMessagebox import CTkMessagebox
 
 # Configuration file path
 if hasattr(sys, '_MEIPASS'):
@@ -8,8 +9,11 @@ if hasattr(sys, '_MEIPASS'):
 else:
     CONFIG_FILE = "config.json"
 
+_last_save_failed = False
+
 # Function to save configuration
 def save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps):
+    global _last_save_failed
     config_data = {
         "b_mode": b_mode,
         "output_folder": output_folder,
@@ -17,8 +21,14 @@ def save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps):
         "preserve_exif": preserve_exif,
         "remove_gps": remove_gps,
     }
-    with open(CONFIG_FILE, "w") as f:
-        json.dump(config_data, f, indent=4)
+    try:
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(config_data, f, indent=4)
+        _last_save_failed = False
+    except OSError:
+        if not _last_save_failed:
+            _last_save_failed = True
+            CTkMessagebox(title="ERROR08", message="Could not save config file")
 
 # Function to load configuration
 def load_config():
