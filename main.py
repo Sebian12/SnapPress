@@ -322,4 +322,6 @@ progress.set(0)
 btn_compress = ctk.CTkButton(app, text="Compress and save", command=compress)
 btn_compress.pack(pady=10)
 
+ctk.CTkLabel(app, text="v1.10.3").pack(padx=20, pady=(0, 5))
+
 app.mainloop()
