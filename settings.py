@@ -1,8 +1,10 @@
-from tkinter import filedialog
+from tkinter import filedialog, PhotoImage
 from CTkMessagebox import CTkMessagebox
 import config
 import customtkinter as ctk
 import platform
+import sys
+import os
 
 # Default settings
 b_mode = "light"
@@ -10,6 +12,11 @@ output_folder = ""
 thumb_size = 100
 preserve_exif = False
 remove_gps = False
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 # Function to change theme
 def theme(mode):
@@ -61,11 +68,20 @@ def select_folder(label):
         CTkMessagebox(title="Done", message="Selected output folder: " + output_folder)
         config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
 
+
+
 def open_settings(app):
     settings_window = ctk.CTkToplevel()
     settings_window.title("Settings")
     settings_window.geometry("300x375")
     settings_window.attributes("-topmost", True)
+
+    if platform.system() == "Windows":
+        settings_window.after(200, lambda: settings_window.iconbitmap(resource_path("assets/logo.ico")))
+    else:
+        icon_img = PhotoImage(file=resource_path("assets/logo.png"))
+        settings_window.icon_img = icon_img
+        settings_window.iconphoto(True, icon_img)
 
     switch_var = ctk.IntVar(value=1 if b_mode == "dark" else 0)
     switch_mode = ctk.CTkSwitch(settings_window, text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
