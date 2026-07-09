@@ -101,7 +101,7 @@ python3 main.py
 - [ ] Pack compressed photos to zip (1.14.0)
 - [ ] Android port (2.0.0)
 
-## Part of the SnapSuite ecosystem
+## Part of the Apertix ecosystem
 
 | App                                                                | Platform | Language |
 |--------------------------------------------------------------------|----------|----------|
