@@ -14,6 +14,7 @@ selected_files = []
 settings_win = None
 file_labels = {}
 thumbnail_refs = {}
+remove_buttons = {}
 
 # Load settings
 settings_saver = config.load_config()
@@ -37,6 +38,7 @@ def remove_file(file, row):
     selected_files.remove(file)
     del thumbnail_refs[file]
     del file_labels[file]
+    del remove_buttons[file]
     row.destroy()
     counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
     before_space_lbl.configure(text="Before: -")
@@ -76,8 +78,9 @@ def select_photos():
                     row.destroy()
                     continue
 
-                ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r)).pack(
-                    side="right", pady=5)
+                remove_btn = ctk.CTkButton(row, text="X", width=30, command=lambda f=file, r=row: remove_file(f, r))
+                remove_btn.pack(side="right", pady=5)
+                remove_buttons[file] = remove_btn
                 lbl = ctk.CTkLabel(row, text=f"{os.path.basename(file)} — {os.path.getsize(file) / MB:.2f} MB")
                 lbl.pack(side="left", padx=10)
                 file_labels[file] = lbl
@@ -97,66 +100,109 @@ def compress():
         CTkMessagebox(title="ERROR01", message="No photos selected!")
         return
 
+    # Checks that a custom output folder, if set, still actually exists
+    if settings.output_folder != "" and not os.path.isdir(settings.output_folder):
+        CTkMessagebox(title="ERROR07", message="Output folder no longer exists! Please select it again in Settings.")
+        return
+
     total_before = 0
     total_after = 0
+    renamed = 0
 
     compress_value = int(quality.get())
 
     if settings.output_folder == "":
         CTkMessagebox(title="WARNING01", message="Output folder not specified! File saved in same folder as original file!")
 
-    for i, file in enumerate(selected_files):
-        name, ext = os.path.splitext(file)
+    # Lock the file list so it can't change while a batch is running
+    # (removing/clearing/re-clicking compress mid-run used to cause files
+    # to be silently skipped)
+    btn_compress.configure(state="disabled")
+    clear_list_btn.configure(state="disabled")
+    for btn in remove_buttons.values():
+        btn.configure(state="disabled")
 
-        # Checks file type
-        if ext.lower() not in [".jpg", ".jpeg", ".png"]:
-            CTkMessagebox(title="ERROR02", message="File not supported!")
-            continue
+    used_paths = set()
 
-        # Checks if file exists
-        if not os.path.exists(file):
-            # If not throws an error
-            CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!")
-            continue
-        file_size = os.path.getsize(file)
-        try:
-            img = Image.open(file)
-            if settings.preserve_exif:
-                exif_data = img.info.get("exif")
+    try:
+        for i, file in enumerate(selected_files):
+            name, ext = os.path.splitext(file)
 
-                if settings.remove_gps:
-                    exif_data = img.getexif()
-                    exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
+            # Checks file type
+            if ext.lower() not in [".jpg", ".jpeg", ".png"]:
+                CTkMessagebox(title="ERROR02", message="File not supported!")
+                continue
 
-        except (OSError, Image.UnidentifiedImageError):
-            CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!")
-            continue
-        # Checking if user selected output folder
-        if settings.output_folder != "":
-            output_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
-        else:
-            output_path = name + "_compressed" + ext
+            # Checks if file exists
+            if not os.path.exists(file):
+                # If not throws an error
+                CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!")
+                continue
+            file_size = os.path.getsize(file)
+            try:
+                img = Image.open(file)
 
-        # Compression is different in .jpg and .png
-        if ext.lower() in [".jpg", ".jpeg"]:
-            if exif_data is not None:
-                img.save(output_path, quality=compress_value, exif=exif_data)
+                # Only touch EXIF at all if the user actually wants it kept
+                if settings.preserve_exif:
+                    exif_data = img.info.get("exif")
+
+                    if settings.remove_gps:
+                        exif_data = img.getexif()
+                        exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
+                else:
+                    exif_data = None
+
+            except (OSError, Image.UnidentifiedImageError):
+                CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!")
+                continue
+
+            # Checking if user selected output folder
+            if settings.output_folder != "":
+                base_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
             else:
-                img.save(output_path, quality=compress_value)
-        elif ext.lower() == ".png":
-            # exif metadata is not supported yet.
-            img.save(output_path, optimize=True, compress_level=compress_value // 10)
+                base_path = name + "_compressed" + ext
 
-        file_size_after = os.path.getsize(output_path)
-        file_labels[file].configure(text=f"{os.path.basename(file)} — {file_size / MB:.2f} MB → {file_size_after / MB:.2f} MB")
+            # Avoid two different source files (e.g. same filename from two
+            # different folders) silently overwriting each other's output
+            # within the same batch
+            output_path = base_path
+            counter = 1
+            while output_path in used_paths:
+                output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
+                counter += 1
+            if output_path != base_path:
+                renamed += 1
+            used_paths.add(output_path)
 
-        img.close()
+            try:
+                # Compression is different in .jpg and .png
+                if ext.lower() in [".jpg", ".jpeg"]:
+                    if exif_data is not None:
+                        img.save(output_path, quality=compress_value, exif=exif_data)
+                    else:
+                        img.save(output_path, quality=compress_value)
+                elif ext.lower() == ".png":
+                    # exif metadata is not supported yet.
+                    img.save(output_path, optimize=True, compress_level=compress_value // 10)
+            except OSError:
+                CTkMessagebox(title="ERROR06", message="Could not save file: " + os.path.basename(file))
+                continue
+            finally:
+                img.close()
 
-        total_before += file_size
-        total_after += file_size_after
+            file_size_after = os.path.getsize(output_path)
+            file_labels[file].configure(text=f"{os.path.basename(file)} — {file_size / MB:.2f} MB → {file_size_after / MB:.2f} MB")
 
-        progress.set((i + 1) / len(selected_files))
-        progress.update()
+            total_before += file_size
+            total_after += file_size_after
+
+            progress.set((i + 1) / len(selected_files))
+            progress.update()
+    finally:
+        btn_compress.configure(state="normal")
+        clear_list_btn.configure(state="normal")
+        for btn in remove_buttons.values():
+            btn.configure(state="normal")
 
     # Calculating space
     if total_before == 0: return
@@ -166,7 +212,11 @@ def compress():
     before_space_lbl.configure(text=f"Before compression: {total_before / MB:.2f}MB")
     after_space_lbl.configure(text=f"New size: {(total_before / MB) - total_difference:.2f}MB")
 
-    CTkMessagebox(title="Done", message="Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)")
+    message = "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)"
+    if renamed > 0:
+        message += f"\n{renamed} file(s) were renamed to avoid overwriting another compressed file."
+
+    CTkMessagebox(title="Done", message=message)
 
 # Function that updates quality label
 def update_label(value):
@@ -185,6 +235,7 @@ def clear_list():
     selected_files.clear()
     file_labels.clear()
     thumbnail_refs.clear()
+    remove_buttons.clear()
     for widget in files_frame.winfo_children():
         widget.destroy()
     counter_lbl.configure(text="Selected files: 0")
