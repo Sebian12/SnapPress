@@ -6,7 +6,7 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 
 ## Features
 
-- Drag & drop support (not yet)
+- Drag & drop support (1.11.0)
 - Batch compression (multiple files at once)
 - Adjustable quality slider (1–95%)
 - Progress bar with live feedback
@@ -94,11 +94,12 @@ python3 main.py
 - [x] User set thumbnail size (1.7.2)
 - [x] Optimization (1.8.0)
 - [x] EXIF metadata preservation (1.9.0)
-- [x] Granular metadata control in settings (sliders/checkboxes to choose which EXIF tags to keep) (1.10.0)
+- [x] Granular metadata control in settings (only GPS data checkbox) (1.10.0)
 - [ ] Drag & Drop support (1.11.0)
 - [ ] Multithreading (1.12.0)
 - [ ] New file format support (1.13.0)
 - [ ] Pack compressed photos to zip (1.14.0)
+- [ ] More metadata control in settings (1.15.0)
 - [ ] Android port (2.0.0)
 
 ## Part of the Apertix ecosystem
@@ -108,7 +109,7 @@ python3 main.py
 | [SnapPress](https://github.com/Sebian12/SnapPress)                 | Windows / Linux / Web | Python / JavaScript |
 | [SnapPress Android](https://github.com/Sebian12/SnapPress-Android) | Android | Kotlin |
 | [SnapRename](https://github.com/Sebian12/SnapRename)               | Windows | C# |
-| SnapRename Android                                                 | Android | Kotlin |
+| SnapRename Android (planned)                                       | Android | Kotlin |
 
 ## Tech stack
 
