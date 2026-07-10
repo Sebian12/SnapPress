@@ -74,7 +74,10 @@ def open_settings(app):
     settings_window = ctk.CTkToplevel(master=app)
     settings_window.title("Settings")
     settings_window.geometry("300x375")
-    settings_window.transient(app)  # Keep the settings window on top of the main window
+    try:
+        settings_window.attributes("-topmost", True)
+    except Exception:
+        pass
 
     if platform.system() == "Windows":
         settings_window.after(200, lambda: settings_window.iconbitmap(resource_path("assets/logo.ico")))
