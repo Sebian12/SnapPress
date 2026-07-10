@@ -118,7 +118,11 @@ def compress():
     # (removing/clearing/re-clicking compress mid-run used to cause files
     # to be silently skipped)
     btn_compress.configure(state="disabled")
+    settings_button.configure(state="disabled")
     clear_list_btn.configure(state="disabled")
+
+    drop_frame.unbind("<Button-1>")
+    drop_label.unbind("<Button-1>")
     for btn in remove_buttons.values():
         btn.configure(state="disabled")
 
@@ -201,6 +205,10 @@ def compress():
     finally:
         btn_compress.configure(state="normal")
         clear_list_btn.configure(state="normal")
+        settings_button.configure(state="normal")
+
+        drop_frame.bind("<Button-1>", lambda e: select_photos())
+        drop_label.bind("<Button-1>", lambda e: select_photos())
         for btn in remove_buttons.values():
             btn.configure(state="normal")
 
