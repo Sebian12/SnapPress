@@ -38,7 +38,7 @@ cd SnapPress
 
 2. Install dependencies:
 ```bash
-pip install Pillow customtkinter CTkMessagebox
+pip install Pillow customtkinter CTkMessagebox tkinterdnd2
 ```
 
 3. Run the app:
@@ -68,7 +68,7 @@ Since v1.9.0, every release comes with an .exe file for Windows (oldest tested W
 
 If the binary doesn't work on your system, you can run from source:
 ```bash
-pip install Pillow customtkinter CTkMessagebox
+pip install Pillow customtkinter CTkMessagebox tkinterdnd2
 python3 main.py
 ```
 
