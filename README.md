@@ -95,12 +95,11 @@ python3 main.py
 - [x] Optimization (1.8.0)
 - [x] EXIF metadata preservation (1.9.0)
 - [x] Granular metadata control in settings (only GPS data checkbox) (1.10.0)
-- [ ] Drag & Drop support (1.11.0)
-- [ ] Multithreading (1.12.0)
-- [ ] New file format support (1.13.0)
-- [ ] Pack compressed photos to zip (1.14.0)
-- [ ] More metadata control in settings (1.15.0)
-- [ ] Android port (2.0.0)
+- [ ] Multithreading (1.11.0)
+- [ ] New file format support (1.12.0)
+- [ ] Pack compressed photos to zip (1.13.0)
+- [ ] More metadata control in settings (1.14.0)
+- [ ] Drag & Drop support (planned)
 
 ## Part of the Apertix ecosystem
 
