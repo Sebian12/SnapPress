@@ -6,7 +6,6 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 
 ## Features
 
-- Drag & drop support (1.11.0)
 - Batch compression (multiple files at once)
 - Adjustable quality slider (1–95%)
 - Progress bar with live feedback
@@ -38,7 +37,7 @@ cd SnapPress
 
 2. Install dependencies:
 ```bash
-pip install Pillow customtkinter CTkMessagebox tkinterdnd2
+pip install Pillow customtkinter CTkMessagebox
 ```
 
 3. Run the app:
@@ -48,29 +47,7 @@ python main.py
 
 ### Windows only
 
-1. Download .exe file from current release
-
-
-## Linux only (native binary)
-
-1. Download the Linux binary from current release
-2. Make it executable `chmod +x SnapPress`
-3. Run: `./SnapPress`
-
-
-## Native Linux Support
-
-A native Linux binary is available starting from v1.8.1. It was built and tested on Zorin OS 18.1 GNOME (Ubuntu-based), v1.8.4 built and tested on Fedora Linux 44 KDE.
-
-Since v1.9.0, every release comes with an .exe file for Windows (oldest tested Windows version is Windows 7), a binary for Ubuntu-based systems, and a binary for Fedora-based systems.
-
-**Note:** the binary may not run on distributions with an older glibc version or on minimal/non-glibc systems (e.g. Alpine). It may also have issues on pure Wayland sessions without XWayland.
-
-If the binary doesn't work on your system, you can run from source:
-```bash
-pip install Pillow customtkinter CTkMessagebox tkinterdnd2
-python3 main.py
-```
+1. Download .exe file from current release or Apertix website.
 
 ## Usage
 
@@ -95,10 +72,10 @@ python3 main.py
 - [x] Optimization (1.8.0)
 - [x] EXIF metadata preservation (1.9.0)
 - [x] Granular metadata control in settings (only GPS data checkbox) (1.10.0)
-- [ ] Multithreading (1.11.0)
+- [ ] More metadata control in settings (1.11.0)
 - [ ] New file format support (1.12.0)
 - [ ] Pack compressed photos to zip (1.13.0)
-- [ ] More metadata control in settings (1.14.0)
+- [ ] Multithreading (planned)
 - [ ] Drag & Drop support (planned)
 
 ## Part of the Apertix ecosystem
