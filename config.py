@@ -12,10 +12,10 @@ else:
 _last_save_failed = False
 
 # Function to save configuration
-def save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps):
+def save_config(appearance_mode, output_folder, thumb_size, preserve_exif, remove_gps):
     global _last_save_failed
     config_data = {
-        "b_mode": b_mode,
+        "appearance_mode": appearance_mode,
         "output_folder": output_folder,
         "thumb_size": thumb_size,
         "preserve_exif": preserve_exif,
@@ -37,7 +37,7 @@ def load_config():
             with open(CONFIG_FILE, "r") as f:
                 data = json.load(f)
                 return {
-                    "b_mode": data.get("b_mode", "light"),
+                    "appearance_mode": data.get("appearance_mode", "light"),
                     "output_folder": data.get("output_folder", ""),
                     "thumb_size": data.get("thumb_size", 100),
                     "preserve_exif": data.get("preserve_exif", False),
@@ -46,4 +46,4 @@ def load_config():
         except (json.JSONDecodeError, KeyError):
             pass
     # If file doesn't exist or is corrupted, return default settings
-    return {"b_mode": "light", "output_folder": "", "thumb_size": 100, "preserve_exif": False, "remove_gps": False}
+    return {"appearance_mode": "light", "output_folder": "", "thumb_size": 100, "preserve_exif": False, "remove_gps": False}
