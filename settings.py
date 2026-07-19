@@ -6,6 +6,8 @@ import platform
 import sys
 import os
 
+import utils
+
 # Default settings
 b_mode = "light"
 output_folder = ""
@@ -13,10 +15,11 @@ thumb_size = 100
 preserve_exif = False
 remove_gps = False
 
-def resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
+utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
+
+
+def save_settings():
+    config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
 
 # Function to change theme
 def theme(mode):
@@ -27,7 +30,7 @@ def theme(mode):
     else:
         b_mode = "light"
         ctk.set_appearance_mode(b_mode)
-    config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
+    save_settings()
 
 def exif_metadata(gps_data):
     global preserve_exif, remove_gps
@@ -37,7 +40,7 @@ def exif_metadata(gps_data):
         remove_gps = False
         gps_data.deselect()
 
-    config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
+    save_settings()
     if preserve_exif:
         gps_data.configure(state="normal")
     else:
@@ -46,14 +49,14 @@ def exif_metadata(gps_data):
 def gps_metadata():
     global remove_gps
     remove_gps = not remove_gps
-    config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
+    save_settings()
 
 # Function to update thumbnail size
 def update_thumbnail_size(value, label):
     global thumb_size
     thumb_size = value
     label.configure(text=f"Thumbnail size: {int(value)}")
-    config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
+    save_settings()
 
 # Function to select output folder
 def select_folder(label):
@@ -66,7 +69,7 @@ def select_folder(label):
         output_folder = chosen_folder
         label.configure(text=output_folder)
         CTkMessagebox(title="Done", message="Selected output folder: " + output_folder)
-        config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
+        save_settings()
 
 
 
@@ -80,9 +83,9 @@ def open_settings(app):
         pass
 
     if platform.system() == "Windows":
-        settings_window.after(200, lambda: settings_window.iconbitmap(resource_path("assets/logo.ico")))
+        settings_window.after(200, lambda: settings_window.iconbitmap(utils.resource_path("assets/logo.ico")))
     else:
-        icon_img = PhotoImage(file=resource_path("assets/logo.png"))
+        icon_img = PhotoImage(file=utils.resource_path("assets/logo.png"))
         settings_window.icon_img = icon_img
         settings_window.iconphoto(True, icon_img)
 
@@ -102,7 +105,7 @@ def open_settings(app):
     thumbSize_label = ctk.CTkLabel(settings_window, text=f"Thumbnail size: {int(thumb_size)}")
     thumbSize_slider = ctk.CTkSlider(settings_window, from_=50, to=200, command=lambda v: update_thumbnail_size(v, thumbSize_label))
     thumbSize_slider.set(thumb_size)
-    thumbSize_slider.bind("<ButtonRelease-1>", lambda e: config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps))
+    thumbSize_slider.bind("<ButtonRelease-1>", lambda e: save_settings())
 
     # What you can see
     switch_mode.pack(side="top", fill="x", padx=10, pady=5)

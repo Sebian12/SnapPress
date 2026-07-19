@@ -7,7 +7,7 @@ import sys
 import platform
 
 # File import
-import settings, config
+import settings, config, utils
 
 # Important global variables
 selected_files = []
@@ -27,11 +27,7 @@ settings.remove_gps = settings_saver.get("remove_gps", False)
 # Megabyte constant
 MB = 1024 * 1024
 
-# Function to get logo for taskbar and in window
-def resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
+utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
 
 # Function to remove file from list
 def remove_file(file, row):
@@ -260,9 +256,9 @@ app = ctk.CTk()
 app.title("SnapPress")
 
 if platform.system() == "Windows":
-    app.iconbitmap(resource_path("assets/logo.ico"))
+    app.iconbitmap(utils.resource_path("assets/logo.ico"))
 else:
-    icon_img = PhotoImage(file=resource_path("assets/logo.png"))
+    icon_img = PhotoImage(file=utils.resource_path("assets/logo.png"))
     app.icon_img = icon_img
     app.iconphoto(True, icon_img)
 
@@ -330,6 +326,6 @@ progress.set(0)
 btn_compress = ctk.CTkButton(app, text="Compress and save", command=compress)
 btn_compress.pack(pady=10)
 
-ctk.CTkLabel(app, text="v1.10.4", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
+ctk.CTkLabel(app, text="v1.10.5-beta1", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
 
 app.mainloop()
