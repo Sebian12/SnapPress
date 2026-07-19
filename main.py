@@ -98,7 +98,7 @@ def compress():
 
     # Checks that a custom output folder, if set, still actually exists
     if settings.output_folder != "" and not os.path.isdir(settings.output_folder):
-        CTkMessagebox(title="ERROR07", message="Output folder no longer exists! Please select it again in Settings.")
+        CTkMessagebox(title="ERROR07", message="Output folder no longer exists! Please select it again in settings.")
         return
 
     total_before = 0
@@ -224,7 +224,7 @@ def compress():
 
 # Function that updates quality label
 def update_label(value):
-    qualityLbl.configure(text=f"Quality: {int(value)}")
+    quality_lbl.configure(text=f"Quality: {int(value)}")
 
 # Function that shows settings window
 def show_settings(app):
@@ -293,8 +293,8 @@ files_frame = ctk.CTkScrollableFrame(app, height=150)
 files_frame.pack(padx=20, fill="x")
 
 # Label that shows how compressed picture will get
-qualityLbl = ctk.CTkLabel(app, text="Quality: 80", font=("Arial", 13))
-qualityLbl.pack()
+quality_lbl = ctk.CTkLabel(app, text="Quality: 80", font=("Arial", 13))
+quality_lbl.pack()
 
 # Slider to decide how compress
 quality = ctk.CTkSlider(app, from_=1, to=95, command=update_label)
