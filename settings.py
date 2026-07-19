@@ -9,7 +9,7 @@ import os
 import utils
 
 # Default settings
-b_mode = "light"
+appearance_mode = "light"
 output_folder = ""
 thumb_size = 100
 preserve_exif = False
@@ -19,17 +19,17 @@ utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid iss
 
 
 def save_settings():
-    config.save_config(b_mode, output_folder, thumb_size, preserve_exif, remove_gps)
+    config.save_config(appearance_mode, output_folder, thumb_size, preserve_exif, remove_gps)
 
 # Function to change theme
 def theme(mode):
-    global b_mode
+    global appearance_mode
     if mode == "light":
-        b_mode = "dark"
-        ctk.set_appearance_mode(b_mode)
+        appearance_mode = "dark"
+        ctk.set_appearance_mode(appearance_mode)
     else:
-        b_mode = "light"
-        ctk.set_appearance_mode(b_mode)
+        appearance_mode = "light"
+        ctk.set_appearance_mode(appearance_mode)
     save_settings()
 
 def exif_metadata(gps_data):
@@ -89,7 +89,7 @@ def open_settings(app):
         settings_window.icon_img = icon_img
         settings_window.iconphoto(True, icon_img)
 
-    switch_var = ctk.IntVar(value=1 if b_mode == "dark" else 0)
+    switch_var = ctk.IntVar(value=1 if appearance_mode == "dark" else 0)
     switch_mode = ctk.CTkSwitch(settings_window, text="Dark mode", variable=switch_var, command=lambda: theme("light" if switch_var.get() == 1 else "dark"))
 
     switch_exif_var = ctk.IntVar(value=1 if preserve_exif else 0)

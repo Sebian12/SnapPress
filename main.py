@@ -18,7 +18,7 @@ remove_buttons = {}
 
 # Load settings
 settings_saver = config.load_config()
-settings.b_mode = settings_saver["b_mode"]
+settings.appearance_mode = settings_saver["appearance_mode"]
 settings.output_folder = settings_saver["output_folder"]
 settings.thumb_size = settings_saver.get("thumb_size", 100)
 settings.preserve_exif = settings_saver.get("preserve_exif", False)
@@ -248,7 +248,7 @@ def clear_list():
     progress.set(0)
 
 # Theme
-ctk.set_appearance_mode(settings.b_mode)
+ctk.set_appearance_mode(settings.appearance_mode)
 ctk.set_default_color_theme("blue")
 
 # Basic app structure
@@ -326,6 +326,6 @@ progress.set(0)
 btn_compress = ctk.CTkButton(app, text="Compress and save", command=compress)
 btn_compress.pack(pady=10)
 
-ctk.CTkLabel(app, text="v1.10.5-beta1", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
+ctk.CTkLabel(app, text="v1.10.5-beta2", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
 
 app.mainloop()
