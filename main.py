@@ -108,7 +108,11 @@ def compress():
     compress_value = int(quality.get())
 
     if settings.output_folder == "":
-        CTkMessagebox(title="WARNING01", message="Output folder not specified! Do you want to continue?", icon="question")
+        output_folder_msg = CTkMessagebox(title="WARNING01", message="Output folder not specified! Do you want to continue?", icon="question", option_1="No", option_2="Yes")
+        response = output_folder_msg.get()
+        if response == "No": 
+            CTkMessagebox(title="Aborted", message="Compression aborted.", icon="cancel")
+            return
 
     # Lock the file list so it can't change while a batch is running
     # (removing/clearing/re-clicking compress mid-run used to cause files
@@ -219,6 +223,8 @@ def compress():
     message = "Compression completed!\n" + f"Saved {total_difference:.2f} MB (decreased in size by {total_difference_percent:.1f}%)"
     if renamed > 0:
         message += f"\n{renamed} file(s) were renamed to avoid overwriting another compressed file."
+    if settings.output_folder == "":
+        message += "\nNo output folder was specified, so the compressed files were saved in the same folders as the original files."
 
     CTkMessagebox(title="Done", message=message, icon="check")
 
