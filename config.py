@@ -28,7 +28,7 @@ def save_config(appearance_mode, output_folder, thumb_size, preserve_exif, remov
     except OSError:
         if not _last_save_failed:
             _last_save_failed = True
-            CTkMessagebox(title="ERROR08", message="Could not save config file!")
+            CTkMessagebox(title="ERROR08", message="Could not save config file!", icon="cancel")
 
 # Function to load configuration
 def load_config():

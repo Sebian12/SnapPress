@@ -68,7 +68,7 @@ def select_folder(label):
     if chosen_folder:
         output_folder = chosen_folder
         label.configure(text=output_folder)
-        CTkMessagebox(title="Done", message="Selected output folder: " + output_folder)
+        CTkMessagebox(title="Done", message="Selected output folder: " + output_folder, icon="check")
         save_settings()
 
 

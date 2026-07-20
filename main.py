@@ -70,7 +70,7 @@ def select_photos():
                     thumbnail_refs[file] = thumb_img
 
                 except (OSError, Image.UnidentifiedImageError):
-                    CTkMessagebox(title="ERROR05", message="Cannot load thumbnail for: " + os.path.basename(file))
+                    CTkMessagebox(title="ERROR05", message="Cannot load thumbnail for: " + os.path.basename(file), icon="cancel")
                     row.destroy()
                     continue
 
@@ -86,19 +86,19 @@ def select_photos():
                 skipped += 1
             counter_lbl.configure(text=f"Selected files: {len(selected_files)}")
         if skipped > 0:
-            CTkMessagebox(title="WARNING02", message=f"{skipped} file(s) already selected!")
+            CTkMessagebox(title="WARNING02", message=f"{skipped} file(s) already selected!", icon="warning")
 
 # Function that compresses photos
 def compress():
     progress.set(0)
     # Checks if user gave any files
     if not selected_files:
-        CTkMessagebox(title="ERROR01", message="No photos selected!")
+        CTkMessagebox(title="ERROR01", message="No photos selected!", icon="cancel")
         return
 
     # Checks that a custom output folder, if set, still actually exists
     if settings.output_folder != "" and not os.path.isdir(settings.output_folder):
-        CTkMessagebox(title="ERROR07", message="Output folder no longer exists! Please select it again in settings.")
+        CTkMessagebox(title="ERROR07", message="Output folder no longer exists! Please select it again in settings.", icon="cancel")
         return
 
     total_before = 0
@@ -108,7 +108,7 @@ def compress():
     compress_value = int(quality.get())
 
     if settings.output_folder == "":
-        CTkMessagebox(title="WARNING01", message="Output folder not specified! File saved in same folder as original file!")
+        CTkMessagebox(title="WARNING01", message="Output folder not specified! Do you want to continue?", icon="question")
 
     # Lock the file list so it can't change while a batch is running
     # (removing/clearing/re-clicking compress mid-run used to cause files
@@ -130,13 +130,13 @@ def compress():
 
             # Checks file type
             if ext.lower() not in [".jpg", ".jpeg", ".png"]:
-                CTkMessagebox(title="ERROR02", message="File not supported!")
+                CTkMessagebox(title="ERROR02", message="File not supported!", icon="cancel")
                 continue
 
             # Checks if file exists
             if not os.path.exists(file):
                 # If not throws an error
-                CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!")
+                CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!", icon="cancel")
                 continue
             file_size = os.path.getsize(file)
             try:
@@ -153,7 +153,7 @@ def compress():
                     exif_data = None
 
             except (OSError, Image.UnidentifiedImageError):
-                CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!")
+                CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!", icon="cancel")
                 continue
 
             # Checking if user selected output folder
@@ -185,7 +185,7 @@ def compress():
                     # exif metadata is not supported yet.
                     img.save(output_path, optimize=True, compress_level=compress_value // 10)
             except OSError:
-                CTkMessagebox(title="ERROR06", message="Could not save file: " + os.path.basename(file))
+                CTkMessagebox(title="ERROR06", message="Could not save file: " + os.path.basename(file), icon="cancel")
                 continue
             finally:
                 img.close()
@@ -220,7 +220,7 @@ def compress():
     if renamed > 0:
         message += f"\n{renamed} file(s) were renamed to avoid overwriting another compressed file."
 
-    CTkMessagebox(title="Done", message=message)
+    CTkMessagebox(title="Done", message=message, icon="check")
 
 # Function that updates quality label
 def update_label(value):
@@ -326,6 +326,6 @@ progress.set(0)
 btn_compress = ctk.CTkButton(app, text="Compress and save", command=compress)
 btn_compress.pack(pady=10)
 
-ctk.CTkLabel(app, text="v1.10.5-beta2", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
+ctk.CTkLabel(app, text="v1.10.5", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
 
 app.mainloop()
