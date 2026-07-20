@@ -108,6 +108,76 @@ def unlock_ui():
     for btn in remove_buttons.values():
         btn.configure(state="normal")
 
+# Function that compresses a single file and returns its before/after size,
+# or None if the file was skipped (unsupported, missing, corrupted, or save error)
+def compress_single_file(file, compress_value, used_paths):
+    name, ext = os.path.splitext(file)
+
+    # Checks file type
+    if ext.lower() not in [".jpg", ".jpeg", ".png"]:
+        CTkMessagebox(title="ERROR02", message="File not supported!", icon="cancel")
+        return None
+
+    # Checks if file exists
+    if not os.path.exists(file):
+        # If not throws an error
+        CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!", icon="cancel")
+        return None
+    file_size = os.path.getsize(file)
+    try:
+        img = Image.open(file)
+
+        # Only touch EXIF at all if the user actually wants it kept
+        if settings.preserve_exif:
+            exif_data = img.info.get("exif")
+
+            if settings.remove_gps:
+                exif_data = img.getexif()
+                exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
+        else:
+            exif_data = None
+
+    except (OSError, Image.UnidentifiedImageError):
+        CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!", icon="cancel")
+        return None
+
+    # Checking if user selected output folder
+    if settings.output_folder != "":
+        base_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
+    else:
+        base_path = name + "_compressed" + ext
+
+    # Avoid two different source files (e.g. same filename from two
+    # different folders) silently overwriting each other's output
+    # within the same batch
+    output_path = base_path
+    counter = 1
+    while output_path in used_paths:
+        output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
+        counter += 1
+    was_renamed = output_path != base_path
+    used_paths.add(output_path)
+
+    try:
+        # Compression is different in .jpg and .png
+        if ext.lower() in [".jpg", ".jpeg"]:
+            if exif_data is not None:
+                img.save(output_path, quality=compress_value, exif=exif_data)
+            else:
+                img.save(output_path, quality=compress_value)
+        elif ext.lower() == ".png":
+            # exif metadata is not supported yet.
+            img.save(output_path, optimize=True, compress_level=compress_value // 10)
+    except OSError:
+        CTkMessagebox(title="ERROR06", message="Could not save file: " + os.path.basename(file), icon="cancel")
+        return None
+    finally:
+        img.close()
+
+    file_size_after = os.path.getsize(output_path)
+
+    return {"size_before": file_size, "size_after": file_size_after, "renamed": was_renamed}
+
 # Function that compresses photos
 def compress():
     progress.set(0)
@@ -139,75 +209,16 @@ def compress():
 
     try:
         for i, file in enumerate(selected_files):
-            name, ext = os.path.splitext(file)
-
-            # Checks file type
-            if ext.lower() not in [".jpg", ".jpeg", ".png"]:
-                CTkMessagebox(title="ERROR02", message="File not supported!", icon="cancel")
+            result = compress_single_file(file, compress_value, used_paths)
+            if result is None:
                 continue
 
-            # Checks if file exists
-            if not os.path.exists(file):
-                # If not throws an error
-                CTkMessagebox(title="ERROR03", message="File  " + os.path.basename(file) + "  doesn't exist!", icon="cancel")
-                continue
-            file_size = os.path.getsize(file)
-            try:
-                img = Image.open(file)
+            file_labels[file].configure(text=f"{os.path.basename(file)} — {result['size_before'] / MB:.2f} MB → {result['size_after'] / MB:.2f} MB")
 
-                # Only touch EXIF at all if the user actually wants it kept
-                if settings.preserve_exif:
-                    exif_data = img.info.get("exif")
-
-                    if settings.remove_gps:
-                        exif_data = img.getexif()
-                        exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
-                else:
-                    exif_data = None
-
-            except (OSError, Image.UnidentifiedImageError):
-                CTkMessagebox(title="ERROR04", message="File corrupted or doesn't exist!", icon="cancel")
-                continue
-
-            # Checking if user selected output folder
-            if settings.output_folder != "":
-                base_path = os.path.join(settings.output_folder, os.path.basename(name) + "_compressed" + ext)
-            else:
-                base_path = name + "_compressed" + ext
-
-            # Avoid two different source files (e.g. same filename from two
-            # different folders) silently overwriting each other's output
-            # within the same batch
-            output_path = base_path
-            counter = 1
-            while output_path in used_paths:
-                output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
-                counter += 1
-            if output_path != base_path:
+            total_before += result["size_before"]
+            total_after += result["size_after"]
+            if result["renamed"]:
                 renamed += 1
-            used_paths.add(output_path)
-
-            try:
-                # Compression is different in .jpg and .png
-                if ext.lower() in [".jpg", ".jpeg"]:
-                    if exif_data is not None:
-                        img.save(output_path, quality=compress_value, exif=exif_data)
-                    else:
-                        img.save(output_path, quality=compress_value)
-                elif ext.lower() == ".png":
-                    # exif metadata is not supported yet.
-                    img.save(output_path, optimize=True, compress_level=compress_value // 10)
-            except OSError:
-                CTkMessagebox(title="ERROR06", message="Could not save file: " + os.path.basename(file), icon="cancel")
-                continue
-            finally:
-                img.close()
-
-            file_size_after = os.path.getsize(output_path)
-            file_labels[file].configure(text=f"{os.path.basename(file)} — {file_size / MB:.2f} MB → {file_size_after / MB:.2f} MB")
-
-            total_before += file_size
-            total_after += file_size_after
 
             progress.set((i + 1) / len(selected_files))
             progress.update()
