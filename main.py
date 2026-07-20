@@ -88,6 +88,26 @@ def select_photos():
         if skipped > 0:
             CTkMessagebox(title="WARNING02", message=f"{skipped} file(s) already selected!", icon="warning")
 
+def lock_ui():
+    btn_compress.configure(state="disabled")
+    settings_button.configure(state="disabled")
+    clear_list_btn.configure(state="disabled")
+
+    drop_frame.unbind("<Button-1>")
+    drop_label.unbind("<Button-1>")
+    for btn in remove_buttons.values():
+        btn.configure(state="disabled")
+    
+def unlock_ui():
+    btn_compress.configure(state="normal")
+    clear_list_btn.configure(state="normal")
+    settings_button.configure(state="normal")
+
+    drop_frame.bind("<Button-1>", lambda e: select_photos())
+    drop_label.bind("<Button-1>", lambda e: select_photos())
+    for btn in remove_buttons.values():
+        btn.configure(state="normal")
+
 # Function that compresses photos
 def compress():
     progress.set(0)
@@ -114,18 +134,7 @@ def compress():
             CTkMessagebox(title="Aborted", message="Compression aborted.", icon="cancel")
             return
 
-    # Lock the file list so it can't change while a batch is running
-    # (removing/clearing/re-clicking compress mid-run used to cause files
-    # to be silently skipped)
-    btn_compress.configure(state="disabled")
-    settings_button.configure(state="disabled")
-    clear_list_btn.configure(state="disabled")
-
-    drop_frame.unbind("<Button-1>")
-    drop_label.unbind("<Button-1>")
-    for btn in remove_buttons.values():
-        btn.configure(state="disabled")
-
+    lock_ui()
     used_paths = set()
 
     try:
@@ -203,14 +212,7 @@ def compress():
             progress.set((i + 1) / len(selected_files))
             progress.update()
     finally:
-        btn_compress.configure(state="normal")
-        clear_list_btn.configure(state="normal")
-        settings_button.configure(state="normal")
-
-        drop_frame.bind("<Button-1>", lambda e: select_photos())
-        drop_label.bind("<Button-1>", lambda e: select_photos())
-        for btn in remove_buttons.values():
-            btn.configure(state="normal")
+        unlock_ui()
 
     # Calculating space
     if total_before == 0: return
