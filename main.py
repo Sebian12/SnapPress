@@ -22,7 +22,7 @@ settings.appearance_mode = settings_saver["appearance_mode"]
 settings.output_folder = settings_saver["output_folder"]
 settings.thumb_size = settings_saver.get("thumb_size", 100)
 settings.preserve_exif = settings_saver.get("preserve_exif", False)
-settings.remove_gps = settings_saver.get("remove_gps", False)
+settings.exif_remove = settings_saver.get("exif_remove", {"gps": False, "camera": False, "datetime": False, "author": False, "software": False})
 
 # Megabyte constant
 MB = 1024 * 1024
@@ -129,10 +129,9 @@ def compress_single_file(file, compress_value, used_paths):
 
         # Only touch EXIF at all if the user actually wants it kept
         if settings.preserve_exif:
-            exif_data = img.info.get("exif")
+            exif_data = img.getexif()
 
-            if settings.remove_gps:
-                exif_data = img.getexif()
+            if settings.exif_remove["gps"]:
                 exif_data.pop(34853, None)  # 34853 is a tag for GPSInfo
         else:
             exif_data = None
@@ -345,6 +344,6 @@ progress.set(0)
 btn_compress = ctk.CTkButton(app, text="Compress and save", command=compress)
 btn_compress.pack(pady=10)
 
-ctk.CTkLabel(app, text="v1.10.5", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
+ctk.CTkLabel(app, text="v1.11.0", text_color=("gray50", "gray60")).pack(padx=20, pady=(0, 5))
 
 app.mainloop()

@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.10.5
+
+### Maintenance
+- Extracted duplicated `resource_path()` from `main.py` and `settings.py` into a shared `utils.py`
+- Added `save_settings()` helper in `settings.py` to replace repeated `config.save_config(...)` calls with all five arguments
+- Renamed `b_mode` to `appearance_mode` for naming consistency
+- Renamed `qualityLbl` to `quality_lbl` to match snake_case convention used elsewhere
+- Documented ERROR0x/WARNING0x numbering scheme
+- Split `compress()` into `lock_ui()`, `unlock_ui()`, and `compress_single_file()` for readability
+
+### Improvements
+- `WARNING01` (no output folder set) is now a Yes/No confirmation instead of a plain info message; declining aborts the compression with a dedicated messagebox
+- Completion summary now notes when files were saved next to the originals because no output folder was set
+
 ## v1.10.4
 
 ### Bugfixes

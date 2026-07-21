@@ -13,13 +13,13 @@ appearance_mode = "light"
 output_folder = ""
 thumb_size = 100
 preserve_exif = False
-remove_gps = False
+exif_remove = {"gps": False, "camera": False, "datetime": False, "author": False, "software": False}
 
 utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
 
 
 def save_settings():
-    config.save_config(appearance_mode, output_folder, thumb_size, preserve_exif, remove_gps)
+    config.save_config(appearance_mode, output_folder, thumb_size, preserve_exif, exif_remove)
 
 # Function to change theme
 def theme(mode):
@@ -33,11 +33,11 @@ def theme(mode):
     save_settings()
 
 def exif_metadata(gps_data):
-    global preserve_exif, remove_gps
+    global preserve_exif
     preserve_exif = not preserve_exif
 
-    if not preserve_exif and remove_gps:
-        remove_gps = False
+    if not preserve_exif and exif_remove["gps"]:
+        exif_remove["gps"] = False
         gps_data.deselect()
 
     save_settings()
@@ -46,9 +46,8 @@ def exif_metadata(gps_data):
     else:
         gps_data.configure(state="disabled")
 
-def gps_metadata():
-    global remove_gps
-    remove_gps = not remove_gps
+def toggle_exif_category(category):
+    exif_remove[category] = not exif_remove[category]
     save_settings()
 
 # Function to update thumbnail size
@@ -95,8 +94,8 @@ def open_settings(app):
     switch_exif_var = ctk.IntVar(value=1 if preserve_exif else 0)
     switch_exif = ctk.CTkSwitch(settings_window, text="Preserve EXIF metadata", variable=switch_exif_var, command=lambda: exif_metadata(gps_data))
 
-    gps_var = ctk.IntVar(value=1 if remove_gps else 0)
-    gps_data = ctk.CTkCheckBox(settings_window, text="Remove GPS data", variable=gps_var, command=lambda: gps_metadata())
+    gps_var = ctk.IntVar(value=1 if exif_remove["gps"] else 0)
+    gps_data = ctk.CTkCheckBox(settings_window, text="Remove GPS data", variable=gps_var, command=lambda: toggle_exif_category("gps"))
     gps_data.configure(state="normal" if preserve_exif else "disabled")
 
     folder_label = ctk.CTkLabel(settings_window, text=output_folder if output_folder != "" else "No folder selected")
