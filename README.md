@@ -4,6 +4,8 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 
 ![Python](https://img.shields.io/badge/Python-3.14-blue) ![Pillow](https://img.shields.io/badge/Pillow-12.x-green) ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20Windows%20%7C%20macOS-lightgrey)
 
+<img width="200" height="250" alt="SnapPress GIF" src="https://github.com/user-attachments/assets/4de56762-34cd-43f4-98d9-06028ec15e57" />
+
 ## Features
 
 - Batch compression (multiple files at once)
@@ -16,7 +18,6 @@ A desktop application for compressing JPEG and PNG photos without visible qualit
 ## Screenshots
 
 ![Empty](assets/empty.png)
-![Empty-zorin](assets/linux-zorin.png)
 ![Dark mode](assets/dark_mode.png)
 ![After compression](assets/one_file_comp.png)
 ![Multiple files](assets/multiple_files_comp.png)
