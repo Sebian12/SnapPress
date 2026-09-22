@@ -29,9 +29,9 @@ settings.exif_remove = settings_saver.get("exif_remove", dict(config.DEFAULT_EXI
 
 # Constants
 MB = 1024 * 1024
-APP_VER = "v1.14.0-01"
+APP_VER = "v1.14.0-02"
 
-utils.resource_path("../assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
+utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
 
 # Function to remove file from list
 def remove_file(file, row):
@@ -325,9 +325,9 @@ if settings_saver.get("load_error"):
     CTkMessagebox(title="ERROR09", message="Could not load config file!", icon="cancel")
 
 if platform.system() == "Windows":
-    app.iconbitmap(utils.resource_path("../assets/logo.ico"))
+    app.iconbitmap(utils.resource_path("assets/logo.ico"))
 else:
-    icon_img = PhotoImage(file=utils.resource_path("../assets/logo.png"))
+    icon_img = PhotoImage(file=utils.resource_path("assets/logo.png"))
     app.icon_img = icon_img
     app.iconphoto(True, icon_img)
 
@@ -353,13 +353,13 @@ right_container = ctk.CTkFrame(top_container, fg_color="transparent")
 right_container.pack(side="right")
 
 # Settings & GitHub buttons / Right side of top_container
-settings_img = Image.open(utils.resource_path("../assets/settings.png"))
+settings_img = Image.open(utils.resource_path("assets/settings.png"))
 settings_icon = ctk.CTkImage(light_image=settings_img, dark_image=settings_img, size=(48, 48))
 settings_button = ctk.CTkButton(right_container, image=settings_icon, text="", command=lambda: show_settings(app, start_update_check), width=40, fg_color=("#E5E5E5", "#313233"), hover_color=("#D0D0D0", "#404142"))
 settings_button.pack(side="top", anchor="n", pady=5)
 
 # GitHub button
-github_img = Image.open(utils.resource_path("../assets/github.png"))
+github_img = Image.open(utils.resource_path("assets/github.png"))
 github_icon = ctk.CTkImage(light_image=github_img, dark_image=github_img, size=(48, 48))
 github_button = ctk.CTkButton(right_container, image=github_icon, text="", command=lambda: webbrowser.open("https://github.com/Sebian12/SnapPress"), width=40, fg_color=("#E5E5E5", "#313233"), hover_color=("#D0D0D0", "#404142"))
 github_button.pack(side="top", anchor="s", pady=5)

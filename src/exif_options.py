@@ -3,7 +3,7 @@ import config, utils
 import platform
 from tkinter import PhotoImage
 
-utils.resource_path("../assets/logo.ico")
+utils.resource_path("assets/logo.ico")
 
 
 def open_exif_options(parent, exif_remove, toggle_callback):
@@ -12,9 +12,9 @@ def open_exif_options(parent, exif_remove, toggle_callback):
     exif_window.geometry("400x600")
 
     if platform.system() == "Windows":
-        exif_window.after(200, lambda: exif_window.iconbitmap(utils.resource_path("../assets/logo.ico")))
+        exif_window.after(200, lambda: exif_window.iconbitmap(utils.resource_path("assets/logo.ico")))
     else:
-        icon_img = PhotoImage(file=utils.resource_path("../assets/logo.png"))
+        icon_img = PhotoImage(file=utils.resource_path("assets/logo.png"))
         exif_window.icon_img = icon_img
         exif_window.iconphoto(True, icon_img)
 

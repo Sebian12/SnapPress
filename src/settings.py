@@ -16,7 +16,7 @@ preserve_exif = False
 exif_remove = dict(config.DEFAULT_EXIF_REMOVE)  # Initialize exif_remove with default values
 exif_window = None
 
-utils.resource_path("../assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
+utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
 
 
 def save_settings():
@@ -87,9 +87,9 @@ def open_settings(app, check_updates_callback):
         pass
 
     if platform.system() == "Windows":
-        settings_window.after(200, lambda: settings_window.iconbitmap(utils.resource_path("../assets/logo.ico")))
+        settings_window.after(200, lambda: settings_window.iconbitmap(utils.resource_path("assets/logo.ico")))
     else:
-        icon_img = PhotoImage(file=utils.resource_path("../assets/logo.png"))
+        icon_img = PhotoImage(file=utils.resource_path("assets/logo.png"))
         settings_window.icon_img = icon_img
         settings_window.iconphoto(True, icon_img)
 
