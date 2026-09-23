@@ -29,7 +29,7 @@ settings.exif_remove = settings_saver.get("exif_remove", dict(config.DEFAULT_EXI
 
 # Constants
 MB = 1024 * 1024
-APP_VER = "v1.14.0-02"
+APP_VER = "v1.14.0-03"
 
 utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
 
@@ -66,7 +66,7 @@ def select_photos():
 
                 try:
                     thumbnails = Image.open(file)
-                    # Resize thumbnail to the specified size in settings
+                    thumbnails.draft("RGB", (settings.thumb_size, settings.thumb_size))
                     thumbnails.thumbnail((settings.thumb_size, settings.thumb_size))
                     thumb_img = ctk.CTkImage(light_image=thumbnails, dark_image=thumbnails, size=(settings.thumb_size, settings.thumb_size))
                     thumb_lbl = ctk.CTkLabel(row, image=thumb_img, text="")
