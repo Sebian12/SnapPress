@@ -29,7 +29,7 @@ settings.exif_remove = settings_saver.get("exif_remove", dict(config.DEFAULT_EXI
 
 # Constants
 MB = 1024 * 1024
-APP_VER = "v1.14.0-03"
+APP_VER = "v1.14.0-04"
 
 utils.resource_path("assets/logo.ico")  # Preload the resource path to avoid issues with PyInstaller
 
@@ -114,7 +114,7 @@ def unlock_ui():
 
 # Function that compresses a single file and returns its before/after size,
 # or None if the file was skipped (unsupported, missing, corrupted, or save error)
-def compress_single_file(file, compress_value, used_paths):
+def compress_single_file(file, compress_value, used_paths, existing_names):
     name, ext = os.path.splitext(file)
 
     # Checks file type
@@ -161,7 +161,7 @@ def compress_single_file(file, compress_value, used_paths):
     # within the same batch
     output_path = base_path
     counter = 1
-    while output_path in used_paths or os.path.exists(output_path):
+    while output_path in used_paths or (os.path.basename(output_path) in existing_names if existing_names is not None else os.path.exists(output_path)):
         output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
         counter += 1
     was_renamed = output_path != base_path
@@ -219,8 +219,13 @@ def compress():
     used_paths = set()
 
     try:
+        # w compress(), przed pętlą po selected_files
+        if settings.output_folder != "":
+            existing_names = set(os.listdir(settings.output_folder))
+        else:
+            existing_names = None  # fallback do starego os.path.exists()
         for i, file in enumerate(selected_files):
-            result = compress_single_file(file, compress_value, used_paths)
+            result = compress_single_file(file, compress_value, used_paths, existing_names)
             if result is None:
                 continue
 
