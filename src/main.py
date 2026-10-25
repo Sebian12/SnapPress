@@ -17,6 +17,19 @@ settings_win = None
 file_labels = {}
 thumbnail_refs = {}
 remove_buttons = {}
+FORMAT_EXTENSIONS = {
+    "JPEG": [".jpg", ".jpeg"],
+    "PNG": [".png"],
+    "AVIF": [".avif"],
+    "WEBP": [".webp"]
+}
+FORMAT_BY_EXT = {
+    ".jpg": "JPEG",
+    ".jpeg": "JPEG",
+    ".png": "PNG",
+    ".webp": "WEBP",
+    ".avif": "AVIF"
+}
 latest_release_url = None
 
 # Load settings
@@ -118,7 +131,7 @@ def compress_single_file(file, compress_value, used_paths, existing_names):
     name, ext = os.path.splitext(file)
 
     # Checks file type
-    if ext.lower() not in [".jpg", ".jpeg", ".png", ".webp", ".avif"]:
+    if ext.lower() not in FORMAT_BY_EXT:
         CTkMessagebox(title="ERROR02", message="File not supported!", icon="cancel")
         return None
 
