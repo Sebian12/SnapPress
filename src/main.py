@@ -125,6 +125,9 @@ def unlock_ui():
     for btn in remove_buttons.values():
         btn.configure(state="normal")
 
+def temp_function(base_path):
+    base_path = os.path.splitext(base_path)[0]
+    
 # Function that compresses a single file and returns its before/after size,
 # or None if the file was skipped (unsupported, missing, corrupted, or save error)
 def compress_single_file(file, compress_value, used_paths, existing_names):
@@ -174,9 +177,13 @@ def compress_single_file(file, compress_value, used_paths, existing_names):
     # within the same batch
     output_path = base_path
     counter = 1
-    while output_path in used_paths or (os.path.basename(output_path) in existing_names if existing_names is not None else os.path.exists(output_path)):
-        output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
-        counter += 1
+    while True:
+        try:
+            out_file = open(output_path, "xb")
+            break
+        except FileExistsError:
+            output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
+            counter += 1
     was_renamed = output_path != base_path
     used_paths.add(output_path)
 
