@@ -52,11 +52,17 @@ def save_config(appearance_mode, output_folder, thumb_size, preserve_exif, exif_
         "preserve_exif": preserve_exif,
         "exif_remove": exif_remove,
     }
+    tmp_file = CONFIG_FILE + ".tmp"
     try:
-        with open(CONFIG_FILE, "w") as f:
+        with open(tmp_file, "w") as f:
             json.dump(config_data, f, indent=4)
+        os.replace(tmp_file, CONFIG_FILE)
         _last_save_failed = False
-    except OSError:
+    except (OSError, TypeError, ValueError):
+        try:
+            os.remove(tmp_file)
+        except OSError:
+            pass
         if not _last_save_failed:
             _last_save_failed = True
             CTkMessagebox(title="ERROR08", message="Could not save config file!", icon="cancel")

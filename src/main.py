@@ -125,12 +125,10 @@ def unlock_ui():
     for btn in remove_buttons.values():
         btn.configure(state="normal")
 
-def temp_function(base_path):
-    base_path = os.path.splitext(base_path)[0]
     
 # Function that compresses a single file and returns its before/after size,
 # or None if the file was skipped (unsupported, missing, corrupted, or save error)
-def compress_single_file(file, compress_value, used_paths, existing_names):
+def compress_single_file(file, compress_value):
     name, ext = os.path.splitext(file)
 
     # Checks file type
@@ -172,38 +170,49 @@ def compress_single_file(file, compress_value, used_paths, existing_names):
     else:
         base_path = name + "_compressed" + ext
 
-    # Avoid two different source files (e.g. same filename from two
-    # different folders) silently overwriting each other's output
-    # within the same batch
     output_path = base_path
     counter = 1
-    while True:
-        try:
-            out_file = open(output_path, "xb")
-            break
-        except FileExistsError:
-            output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
-            counter += 1
-    was_renamed = output_path != base_path
-    used_paths.add(output_path)
-
     try:
-        # Compression is different in .jpg and .png
-        if ext.lower() in [".jpg", ".jpeg", ".webp", ".avif"]:
-            if exif_data is not None:
-                img.save(output_path, quality=compress_value, exif=exif_data)
-            else:
-                img.save(output_path, quality=compress_value)
-        elif ext.lower() == ".png":
-            if exif_data is not None:
-                img.save(output_path, compress_level=(100 - compress_value) // 10, exif=exif_data)
-            else:
-                img.save(output_path, compress_level=(100 - compress_value) // 10)
+        while True:
+            try:
+                out_file = open(output_path, "xb")
+                break
+            except FileExistsError:
+                output_path = os.path.splitext(base_path)[0] + f"_{counter}" + ext
+                counter += 1
+    except OSError:
+        img.close()
+        CTkMessagebox(title="ERROR06", message="Could not create output file for: " + os.path.basename(file), icon="cancel")
+        return None
+    was_renamed = output_path != base_path
+
+    ext_lower = ext.lower()
+    if ext_lower == ".png":
+        save_kwargs = {"compress_level": (100 - compress_value) // 10}
+    else:
+        save_kwargs = {"quality": compress_value}
+    if exif_data is not None:
+        save_kwargs["exif"] = exif_data
+
+    saved = False
+    try:
+        try:
+            img.save(out_file, format=FORMAT_BY_EXT[ext_lower], **save_kwargs)
+        finally:
+            img.close()
+            out_file.close()
+        saved = True
     except (OSError, ValueError):
+        pass
+
+    if not saved:
+        # We created this file ourselves via "xb", so it is safe to remove
+        try:
+            os.remove(output_path)
+        except OSError:
+            pass
         CTkMessagebox(title="ERROR06", message="Could not save file: " + os.path.basename(file), icon="cancel")
         return None
-    finally:
-        img.close()
 
     file_size_after = os.path.getsize(output_path)
 
@@ -236,16 +245,10 @@ def compress():
             return
 
     lock_ui()
-    used_paths = set()
 
     try:
-        # w compress(), przed pętlą po selected_files
-        if settings.output_folder != "":
-            existing_names = set(os.listdir(settings.output_folder))
-        else:
-            existing_names = None  # fallback do starego os.path.exists()
         for i, file in enumerate(selected_files):
-            result = compress_single_file(file, compress_value, used_paths, existing_names)
+            result = compress_single_file(file, compress_value)
             if result is None:
                 continue
 
